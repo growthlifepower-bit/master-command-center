@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Master Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #161616;
+  --bg3: #1e1e1e;
+  --bg4: #262626;
+  --border: #2a2a2a;
+  --border2: #333;
+  --text: #e8e8e8;
+  --text2: #a0a0a0;
+  --text3: #666;
+  --felaa: #c4956a;
+  --relove: #8b7cf6;
+  --glp: #6db87a;
+  --afro: #e6a84a;
+  --danger: #f06565;
+  --warn: #e6a84a;
+  --ok: #6db87a;
+  --info: #60a5fa;
+  --radius: 8px;
+  --radius-sm: 5px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ── Layout ─────────────────────────────── */
+.shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 10;
+  transition: transform .25s;
+}
+.sidebar-logo {
+  padding: 0 20px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.sidebar-logo .name { font-size: 13px; font-weight: 600; color: var(--text); }
+.sidebar-logo .sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px;
+  color: var(--text2);
+  font-size: 13px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all .15s;
+  user-select: none;
+}
+.nav-item:hover { color: var(--text); background: var(--bg3); }
+.nav-item.active { color: var(--text); border-left-color: var(--felaa); background: var(--bg3); }
+.nav-item i { width: 16px; text-align: center; font-size: 13px; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+}
+.sidebar-footer .dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--ok); margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+.main {
+  margin-left: 220px;
+  flex: 1;
+  min-width: 0;
+}
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 5;
+}
+.topbar-title { font-size: 15px; font-weight: 500; }
+.topbar-date { font-size: 12px; color: var(--text3); }
+
+.content { padding: 32px; }
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── Components ─────────────────────────── */
+.section-heading {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text3); margin-bottom: 16px;
+}
+
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 24px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 12px; font-weight: 500; color: var(--text2);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+
+.metric {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.metric .label { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+.metric .value { font-size: 26px; font-weight: 300; color: var(--text); }
+.metric .delta { font-size: 11px; margin-top: 4px; }
+.delta-ok { color: var(--ok); }
+.delta-warn { color: var(--warn); }
+.delta-danger { color: var(--danger); }
+
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: 100px;
+  font-size: 11px; font-weight: 500; border: 1px solid;
+}
+.badge-ok    { color: var(--ok);     background: #6db87a18; border-color: #6db87a40; }
+.badge-warn  { color: var(--warn);   background: #e6a84a18; border-color: #e6a84a40; }
+.badge-danger{ color: var(--danger); background: #f0656518; border-color: #f0656540; }
+.badge-info  { color: var(--info);   background: #60a5fa18; border-color: #60a5fa40; }
+.badge-felaa { color: var(--felaa);  background: #c4956a18; border-color: #c4956a40; }
+.badge-relove{ color: var(--relove); background: #8b7cf618; border-color: #8b7cf640; }
+.badge-glp   { color: var(--glp);    background: #6db87a18; border-color: #6db87a40; }
+.badge-afro  { color: var(--afro);   background: #e6a84a18; border-color: #e6a84a40; }
+
+/* ── Tables ─────────────────────────────── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tbl thead tr { border-bottom: 1px solid var(--border2); }
+.tbl thead th {
+  text-align: left; padding: 8px 12px;
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--text3);
+}
+.tbl tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+}
+.tbl tbody tr:hover { background: var(--bg3); }
+.tbl td { padding: 11px 12px; color: var(--text2); }
+.tbl td.mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+.tbl td.strong { color: var(--text); font-weight: 500; }
+
+/* ── Progress bars ─────────────────────── */
+.prog-wrap { background: var(--bg4); border-radius: 100px; height: 4px; position: relative; }
+.prog-bar { height: 4px; border-radius: 100px; transition: width .4s; }
+.prog-marker {
+  position: absolute; top: -3px;
+  width: 2px; height: 10px; border-radius: 1px;
+}
+
+/* ── Faire item ──────────────────────────── */
+.faire-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+}
+.faire-item .fi-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; gap: 12px; }
+.faire-item .fi-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.faire-item .fi-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.faire-item .fi-days { display: flex; justify-content: space-between; font-size: 10px; color: var(--text3); margin-top: 6px; }
+
+/* ── Arbitrage item ──────────────────────── */
+.arb-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 16px;
+}
+.arb-item.alerted { border-color: #e6a84a60; }
+.arb-info { flex: 1; min-width: 0; }
+.arb-name { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.arb-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.arb-stats { display: flex; gap: 20px; flex-shrink: 0; }
+.arb-stat { text-align: right; }
+.arb-stat .sl { font-size: 10px; color: var(--text3); }
+.arb-stat .sv { font-size: 14px; font-weight: 500; color: var(--text); }
+
+/* ── Brand cards ─────────────────────────── */
+.brand-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+.brand-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.brand-card.felaa::before { background: var(--felaa); }
+.brand-card.relove::before { background: var(--relove); }
+.brand-card.glp::before { background: var(--glp); }
+.brand-card.afro::before { background: var(--afro); }
+.brand-name { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+.brand-tag { font-size: 11px; color: var(--text3); margin-bottom: 16px; }
+.brand-stat-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.brand-stat-row:last-child { border-bottom: none; }
+.brand-stat-row .k { color: var(--text3); }
+.brand-stat-row .v { color: var(--text); font-weight: 500; }
+
+/* ── JIT Flow ────────────────────────────── */
+.flow-step {
+  display: flex; gap: 16px; margin-bottom: 20px;
+  position: relative;
+}
+.flow-step::before {
+  content: '';
+  position: absolute;
+  left: 19px; top: 40px; bottom: -20px;
+  width: 1px;
+  background: var(--border2);
+}
+.flow-step:last-child::before { display: none; }
+.step-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  position: relative; z-index: 1;
+}
+.step-body { padding-top: 8px; }
+.step-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.step-desc { font-size: 12px; color: var(--text3); line-height: 1.6; }
+
+/* ── Filters ─────────────────────────────── */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-btn {
+  padding: 5px 12px; border-radius: 100px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--border2); background: transparent;
+  color: var(--text2); cursor: pointer; transition: all .15s;
+}
+.filter-btn:hover { border-color: var(--text3); color: var(--text); }
+.filter-btn.active { background: var(--bg4); border-color: var(--text3); color: var(--text); }
+select.filter-select {
+  padding: 5px 12px; border-radius: var(--radius-sm); font-size: 11px;
+  border: 1px solid var(--border2); background: var(--bg3);
+  color: var(--text2); cursor: pointer;
+  font-family: inherit;
+}
+select.filter-select:focus { outline: none; border-color: var(--text3); }
+
+/* ── Alert strip ─────────────────────────── */
+.alert-strip {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  margin-bottom: 8px; gap: 12px;
+}
+.alert-strip.danger { background: #f0656510; border: 1px solid #f0656530; }
+.alert-strip.warn   { background: #e6a84a10; border: 1px solid #e6a84a30; }
+.alert-strip .al-text { font-size: 12px; color: var(--text); }
+.alert-strip .al-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* ── Mobile ──────────────────────────────── */
+.hamburger {
+  display: none;
+  position: fixed; top: 16px; left: 16px; z-index: 20;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 10px;
+  cursor: pointer; color: var(--text);
+}
+.overlay {
+  display: none;
+  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  z-index: 9;
+}
+
+@media (max-width: 768px) {
+  .hamburger { display: block; }
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .overlay.open { display: block; }
+  .main { margin-left: 0; }
+  .topbar { padding: 16px 16px 16px 56px; }
+  .content { padding: 20px 16px; }
+  .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .grid-3 { grid-template-columns: repeat(2,1fr); }
+  .grid-2 { grid-template-columns: 1fr; }
+  .arb-item { flex-direction: column; align-items: flex-start; }
+  .arb-stats { flex-direction: row; }
+}
+</style>
+</head>
+<body>
+
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+  <i class="fa-solid fa-bars"></i>
+</button>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="shell">
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="name">⬡ Command Center</div>
+      <div class="sub">Sovereign ecosystem · 4 brands</div>
+    </div>
+
+    <div class="nav-item active" onclick="showSection('overview',this)">
+      <i class="fa-solid fa-chart-pie"></i> Overview
+    </div>
+    <div class="nav-item" onclick="showSection('products',this)">
+      <i class="fa-solid fa-box"></i> Product Registry
+    </div>
+    <div class="nav-item" onclick="showSection('faire',this)">
+      <i class="fa-solid fa-clock"></i> Faire 60-Day
+    </div>
+    <div class="nav-item" onclick="showSection('arbitrage',this)">
+      <i class="fa-solid fa-arrows-rotate"></i> Arbitrage Hub
+    </div>
+    <div class="nav-item" onclick="showSection('brands',this)">
+      <i class="fa-solid fa-layer-group"></i> Brand Pages
+    </div>
+    <div class="nav-item" onclick="showSection('jit',this)">
+      <i class="fa-solid fa-truck-fast"></i> JIT Flow
+    </div>
+
+    <div class="sidebar-footer">
+      <span class="dot"></span>Live · June 2026
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="topbar-title">Overview</span>
+      <span class="topbar-date" id="topbar-date"></span>
+    </div>
+
+    <div class="content">
+
+      <!-- ════════════════ OVERVIEW ════════════════ -->
+      <section class="section active" id="s-overview">
+        <div class="section-heading">At a glance</div>
+
+        <div class="grid-4">
+          <div class="metric">
+            <div class="label">Total SKUs</div>
+            <div class="value">14</div>
+            <div class="delta delta-ok">4 brands active</div>
+          </div>
+          <div class="metric">
+            <div class="label">Revenue potential</div>
+            <div class="value">£831</div>
+            <div class="delta delta-ok">across all live lines</div>
+          </div>
+          <div class="metric">
+            <div class="label">Faire alerts</div>
+            <div class="value" id="ov-faire-count">—</div>
+            <div class="delta delta-danger" id="ov-faire-sub">—</div>
+          </div>
+          <div class="metric">
+            <div class="label">Margin alerts</div>
+            <div class="value" id="ov-arb-count">—</div>
+            <div class="delta delta-warn" id="ov-arb-sub">—</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warn)"></i> Actions needed</div>
+          <div id="ov-alerts"></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-chart-donut"></i> SKUs by type</div>
+            <canvas id="typeChart" height="180"></canvas>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-building-storefront"></i> SKUs by brand</div>
+            <canvas id="brandChart" height="180"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ PRODUCTS ════════════════ -->
+      <section class="section" id="s-products">
+        <div class="section-heading">Master product registry</div>
+        <div class="filter-bar">
+          <select class="filter-select" id="brandFilter" onchange="renderProducts()">
+            <option value="">All brands</option>
+            <option value="FeLAA Atelier">FeLAA Atelier</option>
+            <option value="Relove Soul Finds">Relove Soul Finds</option>
+            <option value="Growth Life Power">Growth Life Power</option>
+            <option value="AfroLegal">AfroLegal</option>
+          </select>
+          <select class="filter-select" id="typeFilter" onchange="renderProducts()">
+            <option value="">All types</option>
+            <option value="Made">Made</option>
+            <option value="Curated">Curated</option>
+            <option value="JIT">JIT</option>
+            <option value="Digital">Digital</option>
+          </select>
+          <button class="filter-btn active" onclick="clearFilters(this)">Clear</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>ID</th><th>Brand</th><th>Product</th><th>Type</th>
+                <th>COG</th><th>Price</th><th>Margin</th><th>Mode</th>
+              </tr>
+            </thead>
+            <tbody id="product-tbody"></tbody>
+          </table>
+        </div>
+        <div style="font-size:11px;color:var(--text3)" id="product-count"></div>
+      </section>
+
+      <!-- ════════════════ FAIRE ════════════════ -->
+      <section class="section" id="s-faire">
+        <div class="section-heading">Faire 60-day safeguard tracker</div>
+        <div class="grid-3">
+          <div class="metric">
+            <div class="label">Total faire lines</div>
+            <div class="value">6</div>
+          </div>
+          <div class="metric">
+            <div class="label">Safe window</div>
+            <div class="value" id="faire-safe">—</div>
+            <div class="delta delta-ok">Day 0–44</div>
+          </div>
+          <div class="metric">
+            <div class="label">Action required</div>
+            <div class="value" id="faire-action">—</div>
+            <div class="delta delta-danger">Return or confirm</div>
+          </div>
+        </div>
+        <div id="faire-list"></div>
+        <div class="card" style="margin-top:24px;">
+          <div class="card-title"><i class="fa-solid fa-circle-info"></i> Return decision guide</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="min-width:52px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--warn);margin-top:2px;">Day 45</div>
+              <div style="font-size:12px;color:var(--text2);">Review — if no sales, drop stock to zero on vibe-coded site. Open Faire return chat.</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="min-width:52px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--warn);margin-top:2px;">Day 50</div>
+              <div style="font-size:12px;color:var(--text2);">Trigger Return — initiate Faire return process on the Faire app.</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="min-width:52px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--danger);margin-top:2px;">Day 55</div>
+              <div style="font-size:12px;color:var(--text2);">Buffer — physical return must be dispatched before Day 60 hard deadline.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ ARBITRAGE ════════════════ -->
+      <section class="section" id="s-arbitrage">
+        <div class="section-heading">Amazon retail arbitrage hub</div>
+        <div id="arb-list"></div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Margin health rules</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span class="badge badge-ok">≥ 60%</span>
+              <span style="font-size:12px;color:var(--text2);">Healthy — proceed with listing</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span class="badge badge-warn">50–59%</span>
+              <span style="font-size:12px;color:var(--text2);">Monitor — check source price before each sale</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span class="badge badge-danger">&lt; 50%</span>
+              <span style="font-size:12px;color:var(--text2);">Pause — reprice or remove from listing immediately</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ BRANDS ════════════════ -->
+      <section class="section" id="s-brands">
+        <div class="section-heading">Brand pages</div>
+        <div class="grid-2">
+
+          <div class="brand-card felaa">
+            <div class="brand-name" style="color:var(--felaa)">FeLAA Atelier</div>
+            <div class="brand-tag">Gallery drops · textiles · art objects</div>
+            <div class="brand-stat-row"><span class="k">SKUs</span><span class="v">6</span></div>
+            <div class="brand-stat-row"><span class="k">Mode</span><span class="v">Made drops + JIT wholesale</span></div>
+            <div class="brand-stat-row"><span class="k">Funnel</span><span class="v">Vibe site + Systeme.io</span></div>
+            <div class="brand-stat-row"><span class="k">Payments</span><span class="v">Stripe links embedded</span></div>
+            <div class="brand-stat-row"><span class="k">Faire lines</span><span class="v">4 active</span></div>
+            <div class="brand-stat-row"><span class="k">Amazon arb</span><span class="v">Art paper, lino tools</span></div>
+          </div>
+
+          <div class="brand-card relove">
+            <div class="brand-name" style="color:var(--relove)">Relove Soul Finds</div>
+            <div class="brand-tag">Upcycled vintage · curated thrift finds</div>
+            <div class="brand-stat-row"><span class="k">SKUs</span><span class="v">3</span></div>
+            <div class="brand-stat-row"><span class="k">Mode</span><span class="v">1-of-1 vintage + JIT</span></div>
+            <div class="brand-stat-row"><span class="k">Funnel</span><span class="v">Vibe-coded site</span></div>
+            <div class="brand-stat-row"><span class="k">Payments</span><span class="v">Stripe links embedded</span></div>
+            <div class="brand-stat-row"><span class="k">Faire lines</span><span class="v">2 active</span></div>
+            <div class="brand-stat-row"><span class="k">Stock</span><span class="v">Thrifted 1-of-1s</span></div>
+          </div>
+
+          <div class="brand-card glp">
+            <div class="brand-name" style="color:var(--glp)">Growth Life Power</div>
+            <div class="brand-tag">Digital products · community events</div>
+            <div class="brand-stat-row"><span class="k">SKUs</span><span class="v">3</span></div>
+            <div class="brand-stat-row"><span class="k">Mode</span><span class="v">Digital infinite stock</span></div>
+            <div class="brand-stat-row"><span class="k">Funnel</span><span class="v">Systeme.io LPs</span></div>
+            <div class="brand-stat-row"><span class="k">Payments</span><span class="v">Stripe + Systeme.io auto</span></div>
+            <div class="brand-stat-row"><span class="k">Products</span><span class="v">Grounding Journal, Workbook</span></div>
+            <div class="brand-stat-row"><span class="k">Events</span><span class="v">Pockets of Peace communals</span></div>
+          </div>
+
+          <div class="brand-card afro">
+            <div class="brand-name" style="color:var(--afro)">AfroLegal</div>
+            <div class="brand-tag">Legal empowerment · community resources</div>
+            <div class="brand-stat-row"><span class="k">SKUs</span><span class="v">2</span></div>
+            <div class="brand-stat-row"><span class="k">Mode</span><span class="v">Digital infinite stock</span></div>
+            <div class="brand-stat-row"><span class="k">Funnel</span><span class="v">Systeme.io LPs</span></div>
+            <div class="brand-stat-row"><span class="k">Payments</span><span class="v">Stripe links embedded</span></div>
+            <div class="brand-stat-row"><span class="k">Products</span><span class="v">Know Your Rights Pack</span></div>
+            <div class="brand-stat-row"><span class="k">Community</span><span class="v">Community access subscription</span></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ════════════════ JIT ════════════════ -->
+      <section class="section" id="s-jit">
+        <div class="section-heading">JIT fulfillment flow</div>
+
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-list-check"></i> Mobile fulfillment SOP — follow this every order</div>
+
+          <div class="flow-step">
+            <div class="step-icon" style="color:var(--info)"><i class="fa-solid fa-credit-card"></i></div>
+            <div class="step-body">
+              <div class="step-title">① Order received</div>
+              <div class="step-desc">Customer pays via Stripe link on your vibe-coded site. Stripe email lands in your inbox. Screenshot the order details.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="step-icon" style="color:var(--relove)"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <div class="step-body">
+              <div class="step-title">② Identify source</div>
+              <div class="step-desc">Check the product type. Made piece → studio stock. JIT Faire → place order on Faire app. JIT Amazon → order via Amazon. Digital → Systeme.io auto-delivers.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="step-icon" style="color:var(--warn)"><i class="fa-solid fa-basket-shopping"></i></div>
+            <div class="step-body">
+              <div class="step-title">③ Place supply order</div>
+              <div class="step-desc">Order from supplier to your address. For Faire items: order only on day of sale — do not pre-stock. For Amazon: Prime next-day where available.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="step-icon" style="color:var(--felaa)"><i class="fa-solid fa-box-open"></i></div>
+            <div class="step-body">
+              <div class="step-title">④ Receive, check &amp; pack</div>
+              <div class="step-desc">Item arrives. Check quality — if faulty, contact supplier before opening packaging fully. Pack with tissue paper, brand card, and a handwritten thank-you note.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="step-icon" style="color:var(--glp)"><i class="fa-solid fa-paper-plane"></i></div>
+            <div class="step-body">
+              <div class="step-title">⑤ Ship to customer</div>
+              <div class="step-desc">Post via Royal Mail Tracked 48 (or 24 for premium orders). Send tracking number to customer via email/WhatsApp.</div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="step-icon" style="color:var(--text3)"><i class="fa-solid fa-check-double"></i></div>
+            <div class="step-body">
+              <div class="step-title">⑥ Log &amp; update</div>
+              <div class="step-desc">Mark fulfilled. If Faire product: note the sale count here and recalculate days remaining. Check margin wasn't eroded by price drift before next sale.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-diagram-project"></i> Ecosystem architecture</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="display:flex;align-items:stretch;gap:0;">
+              <div style="width:3px;background:linear-gradient(180deg,var(--relove),var(--felaa),var(--glp),var(--afro));border-radius:3px;flex-shrink:0;"></div>
+              <div style="flex:1;padding-left:20px;display:flex;flex-direction:column;gap:0;">
+                <div style="padding:14px 0;border-bottom:1px solid var(--border)">
+                  <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">FRONT DOOR</div>
+                  <div style="font-size:13px;color:var(--text);font-weight:500;">Vibe-coded sites (Cloudflare Pages)</div>
+                  <div style="font-size:11px;color:var(--text3);margin-top:2px;">Brand presence, editorial shop pages, product listings</div>
+                </div>
+                <div style="padding:14px 0;border-bottom:1px solid var(--border)">
+                  <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">FUNNELS</div>
+                  <div style="font-size:13px;color:var(--text);font-weight:500;">Systeme.io — LP flyers</div>
+                  <div style="font-size:11px;color:var(--text3);margin-top:2px;">Specific drops, journals, Pockets of Peace events</div>
+                </div>
+                <div style="padding:14px 0;border-bottom:1px solid var(--border)">
+                  <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">PAYMENTS</div>
+                  <div style="font-size:13px;color:var(--text);font-weight:500;">Stripe links embedded as buttons</div>
+                  <div style="font-size:11px;color:var(--text3);margin-top:2px;">No checkout platform needed — lean and sovereign</div>
+                </div>
+                <div style="padding:14px 0;border-bottom:1px solid var(--border)">
+                  <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">SUPPLY</div>
+                  <div style="font-size:13px;color:var(--text);font-weight:500;">Faire wholesale + Amazon retail arbitrage</div>
+                  <div style="font-size:11px;color:var(--text3);margin-top:2px;">JIT on-demand — zero pre-stock risk</div>
+                </div>
+                <div style="padding:14px 0;">
+                  <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">ENGINE ROOM</div>
+                  <div style="font-size:13px;color:var(--text);font-weight:500;">This Command Center</div>
+                  <div style="font-size:11px;color:var(--text3);margin-top:2px;">Registry · Faire countdown · Arbitrage margins · SOP</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// ── Data ─────────────────────────────────────────────────────
+const products = [
+  { id:'FEL-001', brand:'FeLAA Atelier', name:'Stencilled Patterned Fabric Drop',    type:'Made',    cog:12,  price:65,  mode:'Fixed Drop' },
+  { id:'FEL-002', brand:'FeLAA Atelier', name:'Machine Knitted Top — Merino',         type:'Made',    cog:18,  price:95,  mode:'Fixed Drop' },
+  { id:'FEL-003', brand:'FeLAA Atelier', name:'Paper Lace Wall Art — A2',             type:'Made',    cog:8,   price:75,  mode:'1-of-1' },
+  { id:'FEL-004', brand:'FeLAA Atelier', name:'Machine Knitted Cardigan',             type:'Made',    cog:24,  price:145, mode:'Fixed Drop' },
+  { id:'JIT-301', brand:'FeLAA Atelier', name:'Ceramic Tea Vessels (Faire)',          type:'JIT',     cog:14,  price:49,  mode:'JIT Buffer' },
+  { id:'JIT-302', brand:'FeLAA Atelier', name:'Multimedia Art Paper (Amazon)',        type:'JIT',     cog:9,   price:24,  mode:'JIT On-Demand' },
+  { id:'REV-101', brand:'Relove Soul Finds', name:'Vintage Leather Jacket',           type:'Curated', cog:22,  price:95,  mode:'1-of-1' },
+  { id:'REV-102', brand:'Relove Soul Finds', name:'90s Denim Oversized Blazer',       type:'Curated', cog:14,  price:68,  mode:'1-of-1' },
+  { id:'REV-103', brand:'Relove Soul Finds', name:'Rattan Wall Baskets — Set',        type:'JIT',     cog:19,  price:55,  mode:'JIT Buffer' },
+  { id:'DIG-201', brand:'Growth Life Power', name:'The Creative Grounding Journal',   type:'Digital', cog:0,   price:22,  mode:'Infinite' },
+  { id:'DIG-202', brand:'Growth Life Power', name:'Pockets of Peace — Communal Ticket',type:'Digital',cog:0,   price:18,  mode:'Infinite' },
+  { id:'DIG-203', brand:'Growth Life Power', name:'Growth Life Power Workbook',       type:'Digital', cog:0,   price:29,  mode:'Infinite' },
+  { id:'AFR-001', brand:'AfroLegal',         name:'Know Your Rights — Digital Pack',  type:'Digital', cog:0,   price:35,  mode:'Infinite' },
+  { id:'AFR-002', brand:'AfroLegal',         name:'AfroLegal Community Access',       type:'Digital', cog:0,   price:15,  mode:'Infinite' },
+];
+
+const faireItems = [
+  { name:'Ceramic Tea Vessels',  brand:'FeLAA Atelier',    days:53, sales:0 },
+  { name:'Rattan Wall Baskets',  brand:'Relove Soul Finds',days:41, sales:1 },
+  { name:'Incense Holder Set',   brand:'FeLAA Atelier',    days:31, sales:2 },
+  { name:'Woven Cotton Throw',   brand:'FeLAA Atelier',    days:25, sales:1 },
+  { name:'Bamboo Tray — Large',  brand:'Relove Soul Finds',days:17, sales:3 },
+  { name:'Linen Cushion Covers', brand:'FeLAA Atelier',    days:13, sales:4 },
+];
+
+const arbItems = [
+  { name:'Multimedia Art Paper A3 Pack',  src:8.99,  stripe:24, ship:'2–3 days',    alert:false },
+  { name:'Lino Print Carving Tools Set',  src:12.49, stripe:38, ship:'1 day Prime', alert:false },
+  { name:'Natural Dye Starter Kit',       src:21.00, stripe:55, ship:'3–5 days',    alert:false },
+  { name:'A2 Heavyweight Cartridge Paper',src:17.80, stripe:42, ship:'2 days Prime',alert:true  },
+];
+
+// ── Helpers ──────────────────────────────────────────────────
+const margin = (src, stripe) => Math.round(((stripe - src) / stripe) * 100);
+const faireStatus = (days) => {
+  if (days >= 50) return { label:'Trigger Return', cls:'badge-danger' };
+  if (days >= 45) return { label:'Review Now',     cls:'badge-warn' };
+  return               { label:'Active Testing',   cls:'badge-ok' };
+};
+const brandClass = (b) => {
+  if (b.includes('FeLAA'))  return 'badge-felaa';
+  if (b.includes('Relove')) return 'badge-relove';
+  if (b.includes('Growth')) return 'badge-glp';
+  return 'badge-afro';
+};
+const typeClass = (t) => ({Made:'badge-felaa',Curated:'badge-relove',JIT:'badge-warn',Digital:'badge-ok'}[t]||'badge-info');
+
+// ── Topbar date ───────────────────────────────────────────────
+document.getElementById('topbar-date').textContent =
+  new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+// ── Navigation ────────────────────────────────────────────────
+const sectionTitles = {
+  overview:'Overview', products:'Product Registry', faire:'Faire 60-Day',
+  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow'
+};
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('topbar-title').textContent = sectionTitles[id] || id;
+  closeSidebar();
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ── Overview ──────────────────────────────────────────────────
+function initOverview() {
+  const faireAlerts = faireItems.filter(f => f.days >= 45);
+  const arbAlerts   = arbItems.filter(a => a.alert);
+
+  document.getElementById('ov-faire-count').textContent = faireAlerts.length;
+  document.getElementById('ov-faire-sub').textContent   = faireAlerts.length ? 'action required' : 'all clear';
+  document.getElementById('ov-arb-count').textContent   = arbAlerts.length;
+  document.getElementById('ov-arb-sub').textContent     = arbAlerts.length ? 'check before selling' : 'margins healthy';
+
+  const alertsEl = document.getElementById('ov-alerts');
+  if (!faireAlerts.length && !arbAlerts.length) {
+    alertsEl.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 0;">No urgent actions — everything looks healthy.</div>';
+    return;
+  }
+  alertsEl.innerHTML = [
+    ...faireAlerts.map(f => {
+      const s = faireStatus(f.days);
+      return `<div class="alert-strip danger">
+        <div><div class="al-text">${f.name}</div>
+        <div class="al-meta">${f.brand} · Day ${f.days} of 60 · ${f.sales} sale${f.sales!==1?'s':''}</div></div>
+        <span class="badge ${s.cls}">${s.label}</span></div>`;
+    }),
+    ...arbAlerts.map(a => `<div class="alert-strip warn">
+        <div><div class="al-text">${a.name}</div>
+        <div class="al-meta">Amazon · Source £${a.src} · Stripe £${a.stripe}</div></div>
+        <span class="badge badge-warn">Price drift</span></div>`)
+  ].join('');
+}
+
+// ── Charts ────────────────────────────────────────────────────
+function initCharts() {
+  const dark = '#e8e8e8'; const grid = '#2a2a2a';
+  const typeCount = {};
+  products.forEach(p => typeCount[p.type] = (typeCount[p.type]||0)+1);
+  new Chart(document.getElementById('typeChart'), {
+    type:'doughnut',
+    data:{
+      labels: Object.keys(typeCount),
+      datasets:[{ data: Object.values(typeCount),
+        backgroundColor:['#c4956a','#8b7cf6','#e6a84a','#6db87a'],
+        borderWidth:0, hoverOffset:4 }]
+    },
+    options:{ plugins:{ legend:{ labels:{ color:dark, font:{size:11}, boxWidth:12 } } },
+      cutout:'65%' }
+  });
+  const brandCount = {};
+  products.forEach(p => brandCount[p.brand] = (brandCount[p.brand]||0)+1);
+  new Chart(document.getElementById('brandChart'), {
+    type:'doughnut',
+    data:{
+      labels: Object.keys(brandCount).map(b=>b.replace('Growth Life Power','GLP').replace('Relove Soul Finds','Relove')),
+      datasets:[{ data: Object.values(brandCount),
+        backgroundColor:['#c4956a','#8b7cf6','#6db87a','#e6a84a'],
+        borderWidth:0, hoverOffset:4 }]
+    },
+    options:{ plugins:{ legend:{ labels:{ color:dark, font:{size:11}, boxWidth:12 } } },
+      cutout:'65%' }
+  });
+}
+
+// ── Products ──────────────────────────────────────────────────
+function renderProducts() {
+  const bFilter = document.getElementById('brandFilter').value;
+  const tFilter = document.getElementById('typeFilter').value;
+  const filtered = products.filter(p =>
+    (!bFilter || p.brand === bFilter) && (!tFilter || p.type === tFilter)
+  );
+  const tbody = document.getElementById('product-tbody');
+  tbody.innerHTML = filtered.map(p => {
+    const m = p.cog > 0 ? `${margin(p.cog,p.price)}%` : '—';
+    const mColor = p.cog===0 ? 'color:var(--text3)' : margin(p.cog,p.price)>=60?'color:var(--ok)':'color:var(--warn)';
+    return `<tr>
+      <td class="mono">${p.id}</td>
+      <td><span class="badge ${brandClass(p.brand)}" style="font-size:10px">${p.brand.replace('Growth Life Power','GLP').replace('Relove Soul Finds','Relove').replace('FeLAA ','')}</span></td>
+      <td class="strong" style="max-width:220px">${p.name}</td>
+      <td><span class="badge ${typeClass(p.type)}">${p.type}</span></td>
+      <td style="color:var(--text2)">${p.cog>0?'£'+p.cog:'—'}</td>
+      <td class="strong">£${p.price}</td>
+      <td style="${mColor};font-weight:500">${m}</td>
+      <td style="color:var(--text3);font-size:11px">${p.mode}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('product-count').textContent = `${filtered.length} of ${products.length} products`;
+}
+function clearFilters(btn) {
+  document.getElementById('brandFilter').value = '';
+  document.getElementById('typeFilter').value  = '';
+  renderProducts();
+}
+
+// ── Faire ─────────────────────────────────────────────────────
+function renderFaire() {
+  const safe = faireItems.filter(f=>f.days<45).length;
+  const action = faireItems.filter(f=>f.days>=45).length;
+  document.getElementById('faire-safe').textContent   = safe;
+  document.getElementById('faire-action').textContent = action;
+
+  document.getElementById('faire-list').innerHTML = faireItems
+    .sort((a,b)=>b.days-a.days)
+    .map(f => {
+      const s = faireStatus(f.days);
+      const pct = Math.min(Math.round((f.days/60)*100),100);
+      const barColor = f.days>=50?'var(--danger)':f.days>=45?'var(--warn)':'var(--ok)';
+      return `<div class="faire-item">
+        <div class="fi-top">
+          <div>
+            <div class="fi-name">${f.name}</div>
+            <div class="fi-meta">${f.brand} · Day ${f.days} of 60 · ${f.sales} sale${f.sales!==1?'s':''}</div>
+          </div>
+          <span class="badge ${s.cls}">${s.label}</span>
+        </div>
+        <div class="prog-wrap">
+          <div class="prog-bar" style="width:${pct}%;background:${barColor}"></div>
+          <div class="prog-marker" style="left:75%;background:var(--warn)"></div>
+          <div class="prog-marker" style="left:91.7%;background:var(--danger)"></div>
+        </div>
+        <div class="fi-days">
+          <span>Day 0</span>
+          <span style="color:var(--warn)">Day 45</span>
+          <span style="color:var(--danger)">Day 55</span>
+          <span>Day 60</span>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+// ── Arbitrage ─────────────────────────────────────────────────
+function renderArb() {
+  document.getElementById('arb-list').innerHTML = arbItems.map(a => {
+    const m = margin(a.src, a.stripe);
+    const mColor = m>=60?'var(--ok)':m>=50?'var(--warn)':'var(--danger)';
+    const profit = (a.stripe - a.src).toFixed(2);
+    return `<div class="arb-item${a.alert?' alerted':''}">
+      <div class="arb-info">
+        <div class="arb-name">${a.name}</div>
+        <div class="arb-sub">Amazon · Ships ${a.ship}${a.alert?' · ⚠ Price drift detected':''}</div>
+      </div>
+      <div class="arb-stats">
+        <div class="arb-stat">
+          <div class="sl">Source</div>
+          <div class="sv">£${a.src}</div>
+        </div>
+        <div class="arb-stat">
+          <div class="sl">Stripe</div>
+          <div class="sv">£${a.stripe}</div>
+        </div>
+        <div class="arb-stat">
+          <div class="sl">Margin</div>
+          <div class="sv" style="color:${mColor}">${m}%</div>
+        </div>
+        <div class="arb-stat">
+          <div class="sl">Profit</div>
+          <div class="sv" style="color:${mColor}">£${profit}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Init ──────────────────────────────────────────────────────
+initOverview();
+initCharts();
+renderProducts();
+renderFaire();
+renderArb();
+</script>
+</body>
+</html>
