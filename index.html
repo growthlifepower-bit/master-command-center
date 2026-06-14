@@ -316,6 +316,29 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
   z-index: 9;
 }
 
+
+/* ── Content Engine ─────────────────────────────────────────────────────── */
+.voice-btn {
+  padding: 6px 13px; border-radius: 100px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--border2); background: transparent;
+  color: var(--text2); cursor: pointer; transition: all .15s; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.voice-btn:hover { border-color: var(--text3); color: var(--text); }
+.voice-btn.active { background: var(--bg4); border-color: var(--text3); color: var(--text); }
+.output-text {
+  font-size: 13px; color: var(--text); line-height: 1.7;
+  white-space: pre-wrap; word-break: break-word;
+}
+.copy-btn {
+  margin-left: auto; padding: 3px 10px; border-radius: var(--radius-sm);
+  font-size: 11px; border: 1px solid var(--border2); background: transparent;
+  color: var(--text3); cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 4px; transition: all .15s;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--text3); }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
 @media (max-width: 768px) {
   .hamburger { display: block; }
   .sidebar {
@@ -368,6 +391,9 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
     </div>
     <div class="nav-item" onclick="showSection('jit',this)">
       <i class="fa-solid fa-truck-fast"></i> JIT Flow
+    </div>
+    <div class="nav-item" onclick="showSection('content',this)">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Content Engine
     </div>
 
     <div class="sidebar-footer">
@@ -669,6 +695,124 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
         </div>
       </section>
 
+
+      <!-- ════════════════ CONTENT ENGINE ════════════════ -->
+      <section class="section" id="s-content">
+        <div class="section-heading">Content Engine — Generate posts for each brand</div>
+
+        <!-- Input panel -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-title"><i class="fa-solid fa-seedling" style="color:var(--glp)"></i> Your raw material</div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Brand voice</label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;" id="brandVoiceButtons">
+              <button class="voice-btn active" data-brand="glp" onclick="selectBrand(this)">
+                <span style="color:var(--glp)">●</span> Growth Life Power
+              </button>
+              <button class="voice-btn" data-brand="zeenie" onclick="selectBrand(this)">
+                <span style="color:var(--relove)">●</span> Zeenie Summers
+              </button>
+              <button class="voice-btn" data-brand="felaa" onclick="selectBrand(this)">
+                <span style="color:var(--felaa)">●</span> FeLAA Atelier
+              </button>
+              <button class="voice-btn" data-brand="afro" onclick="selectBrand(this)">
+                <span style="color:var(--afro)">●</span> AfroLegal
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Content type</label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;" id="contentTypeButtons">
+              <button class="voice-btn active" data-type="tiktok" onclick="selectType(this)">TikTok script</button>
+              <button class="voice-btn" data-type="instagram" onclick="selectType(this)">Instagram caption</button>
+              <button class="voice-btn" data-type="flyer" onclick="selectType(this)">Flyer headline</button>
+              <button class="voice-btn" data-type="all" onclick="selectType(this)">All three</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">
+              Paste your raw material — a journal line, podcast quote, book passage, or just a feeling
+            </label>
+            <textarea id="rawInput"
+              placeholder="e.g. 'The most radical thing you can do in a divided world is choose to commune...' or just type a topic like 'the power of silence' or 'Ripples of a Revolution event 20 June Mekong Liverpool'"
+              style="width:100%;min-height:110px;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:inherit;font-size:13px;padding:12px;resize:vertical;line-height:1.6;"></textarea>
+          </div>
+
+          <button onclick="generateContent()"
+            style="display:flex;align-items:center;gap:8px;background:var(--felaa);color:#fff;border:none;border-radius:var(--radius-sm);padding:10px 20px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;letter-spacing:.04em;transition:opacity .2s;"
+            onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Content
+          </button>
+        </div>
+
+        <!-- Output panel -->
+        <div id="contentOutput" style="display:none;">
+
+          <!-- TikTok -->
+          <div class="card output-card" id="out-tiktok" style="display:none;">
+            <div class="card-title" style="margin-bottom:12px;">
+              <i class="fa-brands fa-tiktok"></i> TikTok Script
+              <button onclick="copyOutput('tiktok-text')" class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div id="tiktok-text" class="output-text"></div>
+          </div>
+
+          <!-- Instagram -->
+          <div class="card output-card" id="out-instagram" style="display:none;">
+            <div class="card-title" style="margin-bottom:12px;">
+              <i class="fa-brands fa-instagram"></i> Instagram Caption
+              <button onclick="copyOutput('instagram-text')" class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div id="instagram-text" class="output-text"></div>
+          </div>
+
+          <!-- Flyer -->
+          <div class="card output-card" id="out-flyer" style="display:none;">
+            <div class="card-title" style="margin-bottom:12px;">
+              <i class="fa-solid fa-scroll"></i> Flyer Headline
+              <button onclick="copyOutput('flyer-text')" class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+            <div id="flyer-text" class="output-text"></div>
+          </div>
+
+          <!-- Regenerate -->
+          <button onclick="generateContent()"
+            style="display:flex;align-items:center;gap:8px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 16px;font-family:inherit;font-size:11px;cursor:pointer;margin-top:4px;letter-spacing:.04em;">
+            <i class="fa-solid fa-arrows-rotate"></i> Regenerate
+          </button>
+        </div>
+
+        <!-- Loading state -->
+        <div id="contentLoading" style="display:none;">
+          <div class="card" style="text-align:center;padding:40px;">
+            <div style="font-size:22px;margin-bottom:12px;animation:spin 1.2s linear infinite;display:inline-block;">✦</div>
+            <div style="font-size:12px;color:var(--text3);" id="loadingMsg">Tuning into the brand voice...</div>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title"><i class="fa-solid fa-lightbulb" style="color:var(--warn)"></i> Tips for better output</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;font-size:12px;">
+              <span style="color:var(--felaa);flex-shrink:0;">→</span>
+              <span style="color:var(--text2);">Paste an actual line from your journal or a podcast transcript — specific language generates better output than general topics</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12px;">
+              <span style="color:var(--felaa);flex-shrink:0;">→</span>
+              <span style="color:var(--text2);">For events (like Ripples of a Revolution) include the date, venue, and one feeling word — e.g. "intimate live music 20 June Mekong Liverpool — communion"</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12px;">
+              <span style="color:var(--felaa);flex-shrink:0;">→</span>
+              <span style="color:var(--text2);">Generate the flyer headline first — it's the fastest to post to Content 360 and gets you moving</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /shell -->
@@ -731,7 +875,7 @@ document.getElementById('topbar-date').textContent =
 // ── Navigation ────────────────────────────────────────────────
 const sectionTitles = {
   overview:'Overview', products:'Product Registry', faire:'Faire 60-Day',
-  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow'
+  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow', content:'Content Engine'
 };
 function showSection(id, el) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -908,6 +1052,173 @@ function renderArb() {
       </div>
     </div>`;
   }).join('');
+}
+
+// ── Content Engine ────────────────────────────────────────────
+const brandVoices = {
+  glp: {
+    name: 'Growth Life Power Playhouse',
+    color: 'var(--glp)',
+    personality: 'You are the Growth Life Power Playhouse — The Guide. Your voice is warm, intellectually playful, and community-oriented. You turn personal growth, history, philosophy and creativity into immersive adventures. Tone: like a campfire, a documentary, and a workshop rolled into one. You ask questions rather than give answers. You invite exploration. You speak to curious minds who read books and seek experiences. Write as if addressing a thoughtful adult who is tired of noise and craves meaning.',
+    tiktokFormat: 'Hook line (one arresting question or statement). Then 3-4 short punchy lines building the idea. End with an invitation, not a command. No hashtags in the script itself — add them at the end separately. Max 150 words. Conversational, not salesy.',
+    igFormat: 'Open with the strongest line. 3-5 short paragraphs. Philosophical but grounded. End with a gentle question to invite comment. 5-8 relevant hashtags on a new line.',
+    flyerFormat: 'One headline (max 8 words, poetic and arresting). One subheadline (max 12 words, clarifying). One call to action line (max 6 words). Return these as three clearly labelled lines.'
+  },
+  zeenie: {
+    name: 'Zeenie Summers',
+    color: 'var(--relove)',
+    personality: 'You are Zeenie Summers — The Traveller. Deeply human, reflective, poetic. You document the journey of becoming through music, storytelling, culture, love, travel and self-discovery. Tone: like reading someone's journal while travelling the world with them. Vulnerable without oversharing. Artist first. You speak from lived experience. Write in first person, intimate and present-tense where possible.',
+    tiktokFormat: 'Start mid-thought — as if the viewer caught you in a quiet moment. 3-4 lines of honest reflection. One universal truth drawn from personal experience. End with silence implied — no call to action, just resonance. Max 120 words.',
+    igFormat: 'First person, journal-style. Begin with a sensory detail or feeling. 2-4 short paragraphs. Poetic but never pretentious. End with a line that stays with the reader. 4-6 hashtags that feel personal, not algorithmic.',
+    flyerFormat: 'One evocative headline (max 7 words, feels like a song title). One intimate subline (max 10 words). One soft invitation (max 5 words). Return as three clearly labelled lines.'
+  },
+  felaa: {
+    name: 'FeLAA Atelier',
+    color: 'var(--felaa)',
+    personality: 'You are FeLAA Atelier — a gallery-drops fashion and textile art brand. Tone: editorial, minimal, confident. You speak about craft, process, texture, and intention. Each piece is considered. You never shout. You let the work speak. Aesthetic-forward, culturally aware.',
+    tiktokFormat: 'Visual description first — what the viewer sees. Then the process or intention behind the piece in 2-3 short lines. End with where to find it. Max 100 words. Calm and assured.',
+    igFormat: 'Short, editorial. Lead with texture or process. 2-3 sentences max. One hashtag set of 6-8 tags: mix of niche craft tags and broader aesthetic tags.',
+    flyerFormat: 'One drop title (max 5 words, could be a collection name). One material/process note (max 8 words). One availability line (max 5 words). Return as three clearly labelled lines.'
+  },
+  afro: {
+    name: 'AfroLegal',
+    color: 'var(--afro)',
+    personality: 'You are AfroLegal — a legal empowerment resource brand. Tone: clear, empowering, dignified. You translate complex rights and legal knowledge into accessible language for African diaspora communities. Never alarmist. Never condescending. Always on the side of the person reading. Serious but human.',
+    tiktokFormat: 'Start with one right people don't know they have, or one common misconception. Explain simply in 3-4 lines. End with where to learn more. Max 120 words. No legal jargon.',
+    igFormat: 'Lead with empowerment, not fear. Clear short sentences. 3-4 lines. One actionable takeaway. 5-6 hashtags focused on legal empowerment and diaspora communities.',
+    flyerFormat: 'One empowerment headline (max 7 words). One clarifying line about what people will learn/gain (max 10 words). One action line (max 5 words). Return as three clearly labelled lines.'
+  }
+};
+
+let selectedBrand = 'glp';
+let selectedType  = 'tiktok';
+
+const loadingMessages = [
+  'Tuning into the brand voice...',
+  'Reaching into the creative pool...',
+  'Shaping the words...',
+  'Almost there...'
+];
+
+function selectBrand(btn) {
+  document.querySelectorAll('#brandVoiceButtons .voice-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedBrand = btn.dataset.brand;
+}
+
+function selectType(btn) {
+  document.querySelectorAll('#contentTypeButtons .voice-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedType = btn.dataset.type;
+}
+
+function copyOutput(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = el.closest('.card').querySelector('.copy-btn');
+    if (btn) {
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+      setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 2000);
+    }
+  });
+}
+
+async function generateContent() {
+  const raw = document.getElementById('rawInput').value.trim();
+  if (!raw) {
+    document.getElementById('rawInput').style.borderColor = 'var(--danger)';
+    document.getElementById('rawInput').placeholder = 'Please paste something first — a journal line, a quote, a topic, an event detail...';
+    setTimeout(() => { document.getElementById('rawInput').style.borderColor = 'var(--border2)'; }, 2000);
+    return;
+  }
+
+  const voice  = brandVoices[selectedBrand];
+  const types  = selectedType === 'all' ? ['tiktok','instagram','flyer'] : [selectedType];
+
+  // Show loading
+  document.getElementById('contentOutput').style.display  = 'none';
+  document.getElementById('contentLoading').style.display = 'block';
+
+  let msgIdx = 0;
+  const msgInterval = setInterval(() => {
+    document.getElementById('loadingMsg').textContent = loadingMessages[msgIdx % loadingMessages.length];
+    msgIdx++;
+  }, 1400);
+
+  try {
+    // Build prompt
+    const formatInstructions = types.map(t => {
+      if (t === 'tiktok')    return `TIKTOK SCRIPT:\n${voice.tiktokFormat}`;
+      if (t === 'instagram') return `INSTAGRAM CAPTION:\n${voice.igFormat}`;
+      if (t === 'flyer')     return `FLYER HEADLINE:\n${voice.flyerFormat}`;
+    }).join('\n\n');
+
+    const prompt = `${voice.personality}
+
+The person has given you this raw material to work from:
+"${raw}"
+
+Generate the following content. Use the raw material as your creative seed — you may interpret, expand, or distil it, but stay true to the brand voice above.
+
+${formatInstructions}
+
+Return each piece clearly labelled with its format name as a header (e.g. TIKTOK SCRIPT:, INSTAGRAM CAPTION:, FLYER HEADLINE:). No preamble. No commentary. Just the content.`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+
+    clearInterval(msgInterval);
+    document.getElementById('contentLoading').style.display = 'none';
+    document.getElementById('contentOutput').style.display  = 'block';
+
+    // Parse and display outputs
+    const showCard = (id, textId, label, content) => {
+      document.getElementById(id).style.display  = 'block';
+      document.getElementById(textId).textContent = content.trim();
+    };
+    const hideCard = (id) => { document.getElementById(id).style.display = 'none'; };
+
+    // Always hide all first
+    ['out-tiktok','out-instagram','out-flyer'].forEach(hideCard);
+
+    // Extract sections by header
+    const extract = (label) => {
+      const regex = new RegExp(label + '[:\s]*([\s\S]*?)(?=TIKTOK SCRIPT:|INSTAGRAM CAPTION:|FLYER HEADLINE:|$)', 'i');
+      const match = text.match(regex);
+      return match ? match[1].trim() : '';
+    };
+
+    if (types.includes('tiktok')) {
+      const t = extract('TIKTOK SCRIPT');
+      if (t) showCard('out-tiktok', 'tiktok-text', 'TikTok Script', t);
+    }
+    if (types.includes('instagram')) {
+      const ig = extract('INSTAGRAM CAPTION');
+      if (ig) showCard('out-instagram', 'instagram-text', 'Instagram Caption', ig);
+    }
+    if (types.includes('flyer')) {
+      const fl = extract('FLYER HEADLINE');
+      if (fl) showCard('out-flyer', 'flyer-text', 'Flyer Headline', fl);
+    }
+
+  } catch (err) {
+    clearInterval(msgInterval);
+    document.getElementById('contentLoading').style.display = 'none';
+    document.getElementById('contentOutput').style.display  = 'block';
+    document.getElementById('out-tiktok').style.display = 'block';
+    document.getElementById('tiktok-text').textContent = 'Something went wrong generating content. Check your connection and try again.';
+  }
 }
 
 // ── Init ──────────────────────────────────────────────────────
