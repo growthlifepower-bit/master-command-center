@@ -1055,51 +1055,105 @@ function renderArb() {
   }).join('');
 }
 
-// ── Content Engine ────────────────────────────────────────────
+// ── Content Engine (self-contained, no API needed) ───────────────
 const brandVoices = {
   glp: {
     name: 'Growth Life Power Playhouse',
-    color: 'var(--glp)',
-    personality: 'You are the Growth Life Power Playhouse — The Guide. Your voice is warm, intellectually playful, and community-oriented. You turn personal growth, history, philosophy and creativity into immersive adventures. Tone: like a campfire, a documentary, and a workshop rolled into one. You ask questions rather than give answers. You invite exploration. You speak to curious minds who read books and seek experiences. Write as if addressing a thoughtful adult who is tired of noise and craves meaning.',
-    tiktokFormat: 'Hook line (one arresting question or statement). Then 3-4 short punchy lines building the idea. End with an invitation, not a command. No hashtags in the script itself — add them at the end separately. Max 150 words. Conversational, not salesy.',
-    igFormat: 'Open with the strongest line. 3-5 short paragraphs. Philosophical but grounded. End with a gentle question to invite comment. 5-8 relevant hashtags on a new line.',
-    flyerFormat: 'One headline (max 8 words, poetic and arresting). One subheadline (max 12 words, clarifying). One call to action line (max 6 words). Return these as three clearly labelled lines.'
+    tiktok: [
+      "Here\'s a question nobody\'s asking out loud:\n\n[TOPIC].\n\nWe\'ve been taught to avoid it. To scroll past it. To leave it for later.\n\nBut what if later is exactly what they\'re counting on?\n\nThe Playhouse exists for the curious minds who refuse to wait.\n\nCome explore this with us.\n\n#GrowthLifePower #CuriousMinds #ThinkDifferently #Playhouse #Community",
+      "What if the most rebellious thing you could do right now...\n\n...is think?\n\n[TOPIC] — we\'re going deep on this.\n\nNot a lecture. Not a debate.\n\nA campfire. A conversation. An adventure.\n\nThat\'s what the Playhouse is built for.\n\n#GrowthLifePower #Playhouse #Learning #Community #CuriousMinds",
+      "They told you [TOPIC] wasn\'t for people like you.\n\nThe Playhouse disagrees.\n\nEvery week we turn ideas, history and creativity into lived experiences.\n\nBecause knowledge shouldn\'t live in ivory towers.\n\nIt belongs around the campfire.\n\nCome sit with us.\n\n#GrowthLifePower #Playhouse #Community #BlackHistory #Learning"
+    ],
+    instagram: [
+      "There\'s a question sitting quietly underneath [TOPIC] that most people never get to ask.\n\nNot because they\'re not curious.\n\nBut because nobody built them a space to be curious in.\n\nThe Growth Life Power Playhouse is that space.\n\nA campfire. A game. A documentary. A workshop.\n\nAll rolled into one community built for people who still believe thinking together is the most radical act of all.\n\nCome explore with us. Link in bio.\n\n#GrowthLifePower #Playhouse #Community #CuriousMinds #PersonalGrowth #Learning #BlackCommunity #Unity",
+      "The world will give you noise about [TOPIC].\n\nWe want to give you a conversation.\n\nAt the Growth Life Power Playhouse, we don\'t lecture. We explore.\n\nWe ask questions. We sit with the discomfort. We find the wonder.\n\nBecause the most important things in life deserve more than a scroll.\n\nThey deserve a gathering.\n\n#GrowthLifePower #Playhouse #Community #Philosophy #PersonalGrowth #Storytelling #Learning"
+    ],
+    flyer: [
+      "HEADLINE: The Revolution Will Be Curious
+SUBHEADLINE: An evening of exploration, communion and living ideas
+CALL TO ACTION: Come gather with us",
+      "HEADLINE: What If We Thought About This Together?
+SUBHEADLINE: Growth Life Power Playhouse — where curious minds commune
+CALL TO ACTION: Join the conversation",
+      "HEADLINE: Knowledge Belongs Around the Campfire
+SUBHEADLINE: Live experiences for people who still believe in thinking
+CALL TO ACTION: Claim your place"
+    ]
   },
   zeenie: {
     name: 'Zeenie Summers',
-    color: 'var(--relove)',
-    personality: 'You are Zeenie Summers — The Traveller. Deeply human, reflective, poetic. You document the journey of becoming through music, storytelling, culture, love, travel and self-discovery. Tone: like reading someone\'s journal while travelling the world with them. Vulnerable without oversharing. Artist first. You speak from lived experience. Write in first person, intimate and present-tense where possible.',
-    tiktokFormat: 'Start mid-thought — as if the viewer caught you in a quiet moment. 3-4 lines of honest reflection. One universal truth drawn from personal experience. End with silence implied — no call to action, just resonance. Max 120 words.',
-    igFormat: 'First person, journal-style. Begin with a sensory detail or feeling. 2-4 short paragraphs. Poetic but never pretentious. End with a line that stays with the reader. 4-6 hashtags that feel personal, not algorithmic.',
-    flyerFormat: 'One evocative headline (max 7 words, feels like a song title). One intimate subline (max 10 words). One soft invitation (max 5 words). Return as three clearly labelled lines.'
+    tiktok: [
+      "I\'ve been sitting with [TOPIC] for a while now.\n\nAnd I\'m not sure I have an answer yet.\n\nBut I think that\'s the point.\n\nSome things aren\'t meant to be solved.\n\nThey\'re meant to be felt.\n\nAnd then — if you\'re lucky — turned into a song.",
+      "Nobody tells you that [TOPIC] will feel like this.\n\nThey give you the theory.\n\nThey don\'t give you the 3am version of it.\n\nThe quiet one. The one that sits with you on a Tuesday.\n\nThat\'s the one I write music about.",
+      "Somewhere between [TOPIC] and the song I haven\'t finished yet —\n\nthere\'s a version of me I\'m still becoming.\n\nI think that\'s what all of this is.\n\nA long, winding, beautiful process of becoming.\n\nAnd I\'m documenting every step."
+    ],
+    instagram: [
+      "I wrote this line in my journal at some point when I was thinking about [TOPIC]:\n\n\'You can\'t rush the becoming.\'\n\nI didn\'t know what it meant then.\n\nI\'m starting to, now.\n\nSome seasons are for planting. Some are for waiting. Some are for finally understanding what you planted.\n\nI think I\'m in the understanding season.\n\n#ZeenieSummers #JournalEntry #TheBecoming #MusicAndLife #Storytelling #Artist #Reflection",
+      "[TOPIC] taught me something I wasn\'t expecting.\n\nThat the most human thing you can do is keep going anyway.\n\nNot because it\'s easy.\n\nBut because the alternative — becoming smaller, quieter, less — isn\'t really living.\n\nSo here I am. Still becoming. Still writing. Still finding the song in it.\n\n#ZeenieSummers #Artist #Becoming #MusicLife #Storytelling #Vulnerable #LiveAuthentically"
+    ],
+    flyer: [
+      "HEADLINE: Still Becoming
+SUBHEADLINE: An intimate evening of music and presence with Zeenie Summers
+CALL TO ACTION: Come sit with me",
+      "HEADLINE: The Songs I Wrote at 3AM
+SUBHEADLINE: Live music · raw stories · real moments
+CALL TO ACTION: Be in the room",
+      "HEADLINE: A Journal Entry, Live
+SUBHEADLINE: Zeenie Summers — music for the curious heart
+CALL TO ACTION: Reserve your place"
+    ]
   },
   felaa: {
     name: 'FeLAA Atelier',
-    color: 'var(--felaa)',
-    personality: 'You are FeLAA Atelier — a gallery-drops fashion and textile art brand. Tone: editorial, minimal, confident. You speak about craft, process, texture, and intention. Each piece is considered. You never shout. You let the work speak. Aesthetic-forward, culturally aware.',
-    tiktokFormat: 'Visual description first — what the viewer sees. Then the process or intention behind the piece in 2-3 short lines. End with where to find it. Max 100 words. Calm and assured.',
-    igFormat: 'Short, editorial. Lead with texture or process. 2-3 sentences max. One hashtag set of 6-8 tags: mix of niche craft tags and broader aesthetic tags.',
-    flyerFormat: 'One drop title (max 5 words, could be a collection name). One material/process note (max 8 words). One availability line (max 5 words). Return as three clearly labelled lines.'
+    tiktok: [
+      "This piece started as [TOPIC].\n\nHandmade. Considered. Made to last.\n\nWe don\'t do fast fashion.\n\nWe do slow intention.\n\nFeLAA Atelier — limited drops only.\n\nLink in bio when it\'s ready.",
+      "[TOPIC] — that\'s what this collection is made from.\n\nEvery stitch placed with intention.\n\nEvery piece one of a kind.\n\nFeLAA Atelier. Art you can wear.\n\nNext drop coming. Get on the list.",
+      "The process is the art.\n\n[TOPIC] — from raw material to finished piece.\n\nThis is what slow fashion actually looks like.\n\nFeLAA Atelier. Made with care. Worn with purpose."
+    ],
+    instagram: [
+      "[TOPIC].\n\nThat\'s where this piece begins.\n\nAt FeLAA Atelier, we don\'t design for trends. We design for the person who wants to wear something that means something.\n\nLimited. Considered. Yours.\n\nNext drop — details coming soon.\n\n#FeLAAAtelier #SlowFashion #TextileArt #HandmadeFashion #ConsciousStyle #WearableArt #LimitedDrop",
+      "Not everything that\'s made quickly is worth wearing.\n\nThis piece — rooted in [TOPIC] — took time.\n\nThe stencilling. The fabric selection. The finishing.\n\nBecause that\'s what intentional making looks like.\n\nFeLAA Atelier. Gallery drops only.\n\n#FeLAAAtelier #TextileArt #SlowFashion #HandmadeWithLove #WearableArt #FashionArt #LimitedEdition"
+    ],
+    flyer: [
+      "HEADLINE: Worn With Intention
+SUBHEADLINE: FeLAA Atelier — limited gallery drops, handmade textiles
+CALL TO ACTION: Join the drop list",
+      "HEADLINE: Not Fast. Not Disposable. Not for Everyone.
+SUBHEADLINE: FeLAA Atelier — wearable art in limited editions
+CALL TO ACTION: View the collection",
+      "HEADLINE: The Art You Wear
+SUBHEADLINE: Handmade textile art — each piece considered and one of a kind
+CALL TO ACTION: Next drop soon"
+    ]
   },
   afro: {
     name: 'AfroLegal',
-    color: 'var(--afro)',
-    personality: 'You are AfroLegal — a legal empowerment resource brand. Tone: clear, empowering, dignified. You translate complex rights and legal knowledge into accessible language for African diaspora communities. Never alarmist. Never condescending. Always on the side of the person reading. Serious but human.',
-    tiktokFormat: 'Start with one right people don\'t know they have, or one common misconception. Explain simply in 3-4 lines. End with where to learn more. Max 120 words. No legal jargon.',
-    igFormat: 'Lead with empowerment, not fear. Clear short sentences. 3-4 lines. One actionable takeaway. 5-6 hashtags focused on legal empowerment and diaspora communities.',
-    flyerFormat: 'One empowerment headline (max 7 words). One clarifying line about what people will learn/gain (max 10 words). One action line (max 5 words). Return as three clearly labelled lines.'
+    tiktok: [
+      "Most people don\'t know this about [TOPIC].\n\nAnd that\'s not an accident.\n\nYour rights don\'t disappear because nobody told you about them.\n\nAfroLegal exists to change that.\n\nKnowledge is protection. Go to the link in bio.",
+      "When it comes to [TOPIC] — you have more rights than you think.\n\nThe system counts on you not knowing that.\n\nAfroLegal breaks it down. Clearly. In plain English.\n\nBecause legal knowledge belongs to everyone.\n\n#AfroLegal #KnowYourRights #LegalEmpowerment #BlackRights #Community",
+      "One thing about [TOPIC] that nobody explains:\n\nYou don\'t have to face it alone.\n\nYou don\'t have to guess.\n\nYou don\'t have to hope for the best.\n\nYou can know. AfroLegal makes sure of that.\n\n#AfroLegal #KnowYourRights #Empowerment #LegalAdvice #BlackCommunity"
+    ],
+    instagram: [
+      "Let\'s talk about [TOPIC].\n\nBecause too many people in our communities are navigating this without the information they\'re legally entitled to.\n\nAt AfroLegal, we believe legal knowledge is a form of self-protection. And self-protection is a form of self-love.\n\nYou deserve to know your rights. Clearly. Without jargon. Without judgment.\n\nThat\'s what we\'re here for.\n\n#AfroLegal #KnowYourRights #LegalEmpowerment #BlackCommunity #DiasporaPower #SelfProtection #Rights",
+      "The most powerful thing you can walk into any room knowing is [TOPIC].\n\nBecause knowledge changes the dynamic.\n\nIt changes what you accept. What you challenge. What you demand.\n\nAfroLegal exists to put that knowledge in your hands.\n\nSimply. Clearly. Powerfully.\n\n#AfroLegal #KnowYourRights #Empowerment #LegalLiteracy #BlackPower #DiasporaCommunity #Rights"
+    ],
+    flyer: [
+      "HEADLINE: Know Your Rights. Use Them.
+SUBHEADLINE: AfroLegal — legal empowerment resources for the African diaspora
+CALL TO ACTION: Get informed today",
+      "HEADLINE: The Law Belongs to You Too
+SUBHEADLINE: Clear, accessible legal knowledge for our communities
+CALL TO ACTION: Access your rights",
+      "HEADLINE: Knowledge Is Protection
+SUBHEADLINE: AfroLegal — because you deserve to know
+CALL TO ACTION: Learn more now"
+    ]
   }
 };
 
 let selectedBrand = 'glp';
 let selectedType  = 'tiktok';
-
-const loadingMessages = [
-  'Tuning into the brand voice...',
-  'Reaching into the creative pool...',
-  'Shaping the words...',
-  'Almost there...'
-];
+let lastUsedIndices = { tiktok: -1, instagram: -1, flyer: -1 };
 
 function selectBrand(btn) {
   document.querySelectorAll('#brandVoiceButtons .voice-btn').forEach(b => b.classList.remove('active'));
@@ -1125,105 +1179,62 @@ function copyOutput(id) {
   });
 }
 
-async function generateContent() {
+function pickRandom(arr, lastIdx) {
+  let idx;
+  do { idx = Math.floor(Math.random() * arr.length); }
+  while (arr.length > 1 && idx === lastIdx);
+  return { text: arr[idx], idx };
+}
+
+function injectTopic(template, raw) {
+  // Use the first meaningful phrase from raw input as the topic
+  const topic = raw.length > 60 ? raw.substring(0, 57) + '...' : raw;
+  return template.replace(/\[TOPIC\]/g, topic);
+}
+
+function generateContent() {
   const raw = document.getElementById('rawInput').value.trim();
   if (!raw) {
     document.getElementById('rawInput').style.borderColor = 'var(--danger)';
-    document.getElementById('rawInput').placeholder = 'Please paste something first — a journal line, a quote, a topic, an event detail...';
     setTimeout(() => { document.getElementById('rawInput').style.borderColor = 'var(--border2)'; }, 2000);
     return;
   }
 
-  const voice  = brandVoices[selectedBrand];
-  const types  = selectedType === 'all' ? ['tiktok','instagram','flyer'] : [selectedType];
+  const voice = brandVoices[selectedBrand];
+  const types = selectedType === 'all' ? ['tiktok','instagram','flyer'] : [selectedType];
 
-  // Show loading
+  // Brief loading flash for UX
   document.getElementById('contentOutput').style.display  = 'none';
   document.getElementById('contentLoading').style.display = 'block';
 
-  let msgIdx = 0;
-  const msgInterval = setInterval(() => {
-    document.getElementById('loadingMsg').textContent = loadingMessages[msgIdx % loadingMessages.length];
-    msgIdx++;
-  }, 1400);
+  setTimeout(() => {
+    document.getElementById('contentLoading').style.display = 'none';
+    document.getElementById('contentOutput').style.display  = 'block';
 
-  try {
-    // Build prompt
-    const formatInstructions = types.map(t => {
-      if (t === 'tiktok')    return `TIKTOK SCRIPT:\n${voice.tiktokFormat}`;
-      if (t === 'instagram') return `INSTAGRAM CAPTION:\n${voice.igFormat}`;
-      if (t === 'flyer')     return `FLYER HEADLINE:\n${voice.flyerFormat}`;
-    }).join('\n\n');
-
-    const prompt = `${voice.personality}
-
-The person has given you this raw material to work from:
-"${raw}"
-
-Generate the following content. Use the raw material as your creative seed — you may interpret, expand, or distil it, but stay true to the brand voice above.
-
-${formatInstructions}
-
-Return each piece clearly labelled with its format name as a header (e.g. TIKTOK SCRIPT:, INSTAGRAM CAPTION:, FLYER HEADLINE:). No preamble. No commentary. Just the content.`;
-
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
+    // Hide all cards first
+    ['out-tiktok','out-instagram','out-flyer'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
     });
 
-    const data = await response.json();
-    // Surface any errors from worker or Anthropic
-    if (data.error) {
-      throw new Error(JSON.stringify(data));
-    }
-    const text = data.content?.[0]?.text || '';
-
-    clearInterval(msgInterval);
-    document.getElementById('contentLoading').style.display = 'none';
-    document.getElementById('contentOutput').style.display  = 'block';
-
-    // Parse and display outputs
-    const showCard = (id, textId, label, content) => {
-      document.getElementById(id).style.display  = 'block';
-      document.getElementById(textId).textContent = content.trim();
-    };
-    const hideCard = (id) => { document.getElementById(id).style.display = 'none'; };
-
-    // Always hide all first
-    ['out-tiktok','out-instagram','out-flyer'].forEach(hideCard);
-
-    // Extract sections by header
-    const extract = (label) => {
-      const regex = new RegExp(label + '[:\s]*([\s\S]*?)(?=TIKTOK SCRIPT:|INSTAGRAM CAPTION:|FLYER HEADLINE:|$)', 'i');
-      const match = text.match(regex);
-      return match ? match[1].trim() : '';
-    };
-
     if (types.includes('tiktok')) {
-      const t = extract('TIKTOK SCRIPT');
-      if (t) showCard('out-tiktok', 'tiktok-text', 'TikTok Script', t);
+      const { text, idx } = pickRandom(voice.tiktok, lastUsedIndices.tiktok);
+      lastUsedIndices.tiktok = idx;
+      document.getElementById('out-tiktok').style.display = 'block';
+      document.getElementById('tiktok-text').textContent  = injectTopic(text, raw);
     }
     if (types.includes('instagram')) {
-      const ig = extract('INSTAGRAM CAPTION');
-      if (ig) showCard('out-instagram', 'instagram-text', 'Instagram Caption', ig);
+      const { text, idx } = pickRandom(voice.instagram, lastUsedIndices.instagram);
+      lastUsedIndices.instagram = idx;
+      document.getElementById('out-instagram').style.display = 'block';
+      document.getElementById('instagram-text').textContent  = injectTopic(text, raw);
     }
     if (types.includes('flyer')) {
-      const fl = extract('FLYER HEADLINE');
-      if (fl) showCard('out-flyer', 'flyer-text', 'Flyer Headline', fl);
+      const { text, idx } = pickRandom(voice.flyer, lastUsedIndices.flyer);
+      lastUsedIndices.flyer = idx;
+      document.getElementById('out-flyer').style.display = 'block';
+      document.getElementById('flyer-text').textContent  = injectTopic(text, raw);
     }
-
-  } catch (err) {
-    clearInterval(msgInterval);
-    document.getElementById('contentLoading').style.display = 'none';
-    document.getElementById('contentOutput').style.display  = 'block';
-    document.getElementById('out-tiktok').style.display = 'block';
-    document.getElementById('tiktok-text').textContent = 'ERROR: ' + err.message;
-  }
+  }, 1200);
 }
 
 // ── Init ──────────────────────────────────────────────────────
