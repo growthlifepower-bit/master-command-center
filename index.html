@@ -1177,6 +1177,10 @@ Return each piece clearly labelled with its format name as a header (e.g. TIKTOK
     });
 
     const data = await response.json();
+    // Surface any errors from worker or Anthropic
+    if (data.error) {
+      throw new Error(JSON.stringify(data));
+    }
     const text = data.content?.[0]?.text || '';
 
     clearInterval(msgInterval);
@@ -1218,7 +1222,7 @@ Return each piece clearly labelled with its format name as a header (e.g. TIKTOK
     document.getElementById('contentLoading').style.display = 'none';
     document.getElementById('contentOutput').style.display  = 'block';
     document.getElementById('out-tiktok').style.display = 'block';
-    document.getElementById('tiktok-text').textContent = 'Something went wrong generating content. Check your connection and try again.';
+    document.getElementById('tiktok-text').textContent = 'ERROR: ' + err.message;
   }
 }
 
