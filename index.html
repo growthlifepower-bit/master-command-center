@@ -340,6 +340,40 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
 .copy-btn:hover { color: var(--text); border-color: var(--text3); }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+
+/* ── Promote tab ─────────────────────────────────────────── */
+.promo-day {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.promo-day-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--glp); min-width: 36px;
+  flex-shrink: 0; padding-top: 2px; line-height: 1.4; text-align: center;
+}
+.promo-day-tasks { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.promo-task {
+  font-size: 12px; color: var(--text2); padding: 6px 10px;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  cursor: pointer; transition: all .15s; user-select: none;
+  position: relative; padding-left: 28px;
+}
+.promo-task::before {
+  content: '○'; position: absolute; left: 9px; top: 6px;
+  font-size: 11px; color: var(--text3);
+}
+.promo-task.done { color: var(--text3); border-color: transparent; }
+.promo-task.done::before { content: '✓'; color: var(--glp); }
+.promo-task:hover { border-color: var(--text3); color: var(--text); }
+.channel-row {
+  display: flex; gap: 14px; padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.ch-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; margin-top: 2px; }
+.ch-name { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ch-desc { font-size: 11px; color: var(--text3); line-height: 1.6; }
+
 @media (max-width: 768px) {
   .hamburger { display: block; }
   .sidebar {
@@ -395,6 +429,9 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
     </div>
     <div class="nav-item" onclick="showSection('content',this)">
       <i class="fa-solid fa-wand-magic-sparkles"></i> Content Engine
+    </div>
+    <div class="nav-item" onclick="showSection('promote',this)">
+      <i class="fa-solid fa-bullhorn"></i> Promote
     </div>
 
     <div class="sidebar-footer">
@@ -814,6 +851,155 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
 
       </section>
 
+      <!-- ════════════════ PROMOTE ════════════════ -->
+      <section class="section" id="s-promote">
+        <div class="section-heading">Event Promotion — Ripples of a Revolution</div>
+
+        <!-- Countdown -->
+        <div class="card" style="text-align:center;padding:28px 20px;margin-bottom:16px;background:linear-gradient(135deg,#1e1e1e,#262626);">
+          <div style="font-size:11px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Time until the event</div>
+          <div id="countdown-display" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:300;color:var(--felaa);letter-spacing:.04em;font-family:\'JetBrains Mono\',monospace;">—</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:8px;">Saturday 20 June 2026 · 8PM · Mekong Restaurant · Liverpool</div>
+          <div style="margin-top:16px;">
+            <a href="https://growthlifepower.com/ripples" target="_blank"
+              style="font-size:11px;color:var(--glp);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(109,184,122,0.3);padding-bottom:2px;">
+              growthlifepower.com/ripples ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 5-day plan -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-title"><i class="fa-solid fa-calendar-days" style="color:var(--glp)"></i> 5-Day Promotion Plan</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+
+            <div class="promo-day">
+              <div class="promo-day-label">TODAY<br><span style="color:var(--text3);font-size:9px;">Mon 15</span></div>
+              <div class="promo-day-tasks">
+                <div class="promo-task done" id="task-1">Design flyer — use Content Engine flyer headline, add QR code to /ripples</div>
+                <div class="promo-task" id="task-2">Send personal WhatsApp message to every group you're in</div>
+                <div class="promo-task" id="task-3">Ask Mekong to share with their regulars</div>
+              </div>
+            </div>
+
+            <div class="promo-day">
+              <div class="promo-day-label">TUE<br><span style="color:var(--text3);font-size:9px;">16 Jun</span></div>
+              <div class="promo-day-tasks">
+                <div class="promo-task" id="task-4">Print 50 A5 flyers at Ryman/Staples (£10–15)</div>
+                <div class="promo-task" id="task-5">Distribute: African grocery shops, barbershops, salons in Bootle + Liverpool 8</div>
+                <div class="promo-task" id="task-6">Leave a stack at Mekong counter</div>
+              </div>
+            </div>
+
+            <div class="promo-day">
+              <div class="promo-day-label">WED<br><span style="color:var(--text3);font-size:9px;">17 Jun</span></div>
+              <div class="promo-day-tasks">
+                <div class="promo-task" id="task-7">Post first TikTok — use script from Content Engine (GLP voice)</div>
+                <div class="promo-task" id="task-8">Post to Instagram — caption from Content Engine</div>
+                <div class="promo-task" id="task-9">Community centres + churches flyer drop</div>
+              </div>
+            </div>
+
+            <div class="promo-day">
+              <div class="promo-day-label">THU<br><span style="color:var(--text3);font-size:9px;">18 Jun</span></div>
+              <div class="promo-day-tasks">
+                <div class="promo-task" id="task-10">Check TikTok views — if 200+ organically, boost for £5–10 (Liverpool, 18–40, music/culture)</div>
+                <div class="promo-task" id="task-11">Second WhatsApp nudge — "just a few days away, would love to see you there"</div>
+              </div>
+            </div>
+
+            <div class="promo-day">
+              <div class="promo-day-label">FRI<br><span style="color:var(--text3);font-size:9px;">19 Jun</span></div>
+              <div class="promo-day-tasks">
+                <div class="promo-task" id="task-12">Final TikTok — "tomorrow evening, Mekong Restaurant, free, come as you are"</div>
+                <div class="promo-task" id="task-13">Check Google Form RSVPs — message attendees with venue confirmation</div>
+              </div>
+            </div>
+
+            <div class="promo-day" style="border-bottom:none;">
+              <div class="promo-day-label" style="color:var(--felaa);">SAT<br><span style="color:var(--text3);font-size:9px;">20 Jun</span></div>
+              <div class="promo-day-tasks">
+                <div class="promo-task" id="task-14">Attend Africa Oyé afternoon — hand flyers to people leaving, talk to everyone</div>
+                <div class="promo-task" id="task-15">Set up at Mekong by 7PM · Doors open 8PM · Ripples of a Revolution ✦</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Channel strategy -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-title"><i class="fa-solid fa-signal" style="color:var(--relove)"></i> Channel Strategy</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+
+            <div class="channel-row" style="border-color:var(--glp)40;">
+              <div class="ch-icon" style="color:var(--glp)"><i class="fa-brands fa-whatsapp"></i></div>
+              <div class="ch-body">
+                <div class="ch-name">WhatsApp <span class="badge badge-ok" style="font-size:9px;">Highest conversion</span></div>
+                <div class="ch-desc">Personal message to every group. One sentence + link. People trust a personal message over any ad. Do this today.</div>
+              </div>
+            </div>
+
+            <div class="channel-row" style="border-color:var(--felaa)40;">
+              <div class="ch-icon" style="color:var(--felaa)"><i class="fa-solid fa-print"></i></div>
+              <div class="ch-body">
+                <div class="ch-name">Physical Flyers <span class="badge badge-felaa" style="font-size:9px;">50 copies max</span></div>
+                <div class="ch-desc">A5, QR code to /ripples. Target: African/Caribbean grocers, barbershops, salons, Mekong counter, community centres. 50 well-placed beats 200 scattered.</div>
+              </div>
+            </div>
+
+            <div class="channel-row" style="border-color:var(--info)40;">
+              <div class="ch-icon" style="color:var(--info)"><i class="fa-brands fa-tiktok"></i></div>
+              <div class="ch-body">
+                <div class="ch-name">TikTok <span class="badge badge-info" style="font-size:9px;">Organic first</span></div>
+                <div class="ch-desc">Post Wed & Fri. If Wed post hits 200+ views organically, boost for £5–10 — Liverpool radius, 18–40, music + culture interests. Never boost before testing organic.</div>
+              </div>
+            </div>
+
+            <div class="channel-row" style="border-color:var(--relove)40;">
+              <div class="ch-icon" style="color:var(--relove)"><i class="fa-brands fa-instagram"></i></div>
+              <div class="ch-body">
+                <div class="ch-name">Instagram <span class="badge badge-relove" style="font-size:9px;">Supporting role</span></div>
+                <div class="ch-desc">Mirror TikTok posts as Reels. Caption from Content Engine. Not your primary channel this week — TikTok has better organic reach for new accounts.</div>
+              </div>
+            </div>
+
+            <div class="channel-row" style="border-bottom:none;">
+              <div class="ch-icon" style="color:var(--warn)"><i class="fa-solid fa-person-walking"></i></div>
+              <div class="ch-body">
+                <div class="ch-name">Africa Oyé — In Person <span class="badge badge-warn" style="font-size:9px;">Highest quality</span></div>
+                <div class="ch-desc">Saturday afternoon. Be there. Talk to people leaving who look like they want the evening to keep going. Hand them a flyer. This is your best channel of all.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Budget -->
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-coins" style="color:var(--warn)"></i> Total promotion budget</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+              <span style="color:var(--text2);">50 A5 flyers printed (Ryman/Staples)</span>
+              <span style="color:var(--text);font-weight:500;">£10–15</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+              <span style="color:var(--text2);">TikTok boost (only if organic hits 200+ views)</span>
+              <span style="color:var(--text);font-weight:500;">£5–10</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+              <span style="color:var(--text2);">WhatsApp · Instagram · In-person at Oyé</span>
+              <span style="color:var(--glp);font-weight:500;">Free</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;padding:10px 0;font-weight:600;">
+              <span style="color:var(--text);">Total max spend</span>
+              <span style="color:var(--felaa);">£25</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /shell -->
@@ -876,7 +1062,7 @@ document.getElementById('topbar-date').textContent =
 // ── Navigation ────────────────────────────────────────────────
 const sectionTitles = {
   overview:'Overview', products:'Product Registry', faire:'Faire 60-Day',
-  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow', content:'Content Engine'
+  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow', content:'Content Engine', promote:'Event Promotion'
 };
 function showSection(id, el) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1236,6 +1422,33 @@ function generateContent() {
     }
   }, 1200);
 }
+
+
+// ── Promote countdown ─────────────────────────────────────────
+function updateCountdown() {
+  const event = new Date('2026-06-20T20:00:00');
+  const now   = new Date();
+  const diff  = event - now;
+  if (diff <= 0) {
+    document.getElementById('countdown-display').textContent = 'It\'s happening NOW ✦';
+    return;
+  }
+  const days  = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const mins  = Math.floor((diff % (1000*60*60)) / (1000*60));
+  const secs  = Math.floor((diff % (1000*60)) / 1000);
+  document.getElementById('countdown-display').textContent =
+    `${days}d ${String(hours).padStart(2,'0')}h ${String(mins).padStart(2,'0')}m ${String(secs).padStart(2,'0')}s`;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// Task checklist toggle
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('promo-task')) {
+    e.target.classList.toggle('done');
+  }
+});
 
 // ── Init ──────────────────────────────────────────────────────
 initOverview();
