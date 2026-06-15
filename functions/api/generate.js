@@ -1,7 +1,4 @@
 // functions/api/generate.js
-// Cloudflare Pages Function — proxies requests to Anthropic API
-// API key is stored as a Cloudflare environment secret, never in code
-
 export async function onRequestPost(context) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -11,14 +8,23 @@ export async function onRequestPost(context) {
   };
 
   try {
+    // Check API key exists
+    const apiKey = context.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        error: 'MISSING_API_KEY',
+        detail: 'ANTHROPIC_API_KEY environment variable not found'
+      }), { status: 500, headers: corsHeaders });
+    }
+
     const body = await context.request.json();
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Content-Type':            'application/json',
-        'x-api-key':               context.env.ANTHROPIC_API_KEY,
-        'anthropic-version':       '2023-06-01',
+        'Content-Type':      'application/json',
+        'x-api-key':         apiKey,
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model:      body.model      || 'claude-sonnet-4-6',
@@ -27,18 +33,28 @@ export async function onRequestPost(context) {
       }),
     });
 
+    // Return raw status + body so we can see any Anthropic errors
     const data = await response.json();
+
+    if (!response.ok) {
+      return new Response(JSON.stringify({
+        error: 'ANTHROPIC_ERROR',
+        status: response.status,
+        detail: data
+      }), { status: response.status, headers: corsHeaders });
+    }
+
     return new Response(JSON.stringify(data), { headers: corsHeaders });
 
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500, headers: corsHeaders }
-    );
+    return new Response(JSON.stringify({
+      error: 'WORKER_EXCEPTION',
+      detail: err.message,
+      stack: err.stack
+    }), { status: 500, headers: corsHeaders });
   }
 }
 
-// Handle preflight OPTIONS request
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {
