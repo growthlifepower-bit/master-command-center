@@ -1326,7 +1326,7 @@ async function generateAIContent() {
   var prompt = persona.voice + '\n\nThe person has given you this raw material to work from:\n"' + raw + '"\n\nGenerate the following content. Use the raw material as your creative seed — interpret, expand, or distil it, but stay true to the brand voice above.\n\n' + formatLines + '\n\nReturn each piece clearly labelled with its format name as a header (TIKTOK SCRIPT:, INSTAGRAM CAPTION:, FLYER COPY:). No preamble. No commentary. Just the content.';
 
   try {
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
+    var response = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
