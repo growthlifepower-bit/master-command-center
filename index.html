@@ -1228,81 +1228,147 @@ function renderArb() {
   }).join('');
 }
 
-// ── Content Engine (self-contained templates, no API needed) ────────
-const brandVoices = {
+// ── Content Engine (dynamic, prompt-responsive) ─────────────────────
+
+const brandMeta = {
   glp: {
     name: 'Growth Life Power Playhouse',
-    tiktok: [
-      "Here is a question nobody is asking out loud:\n\n[TOPIC].\n\nWe have been taught to avoid it. To scroll past it. To leave it for later.\n\nBut what if later is exactly what they are counting on?\n\nThe Playhouse exists for the curious minds who refuse to wait.\n\nCome explore this with us.\n\n#GrowthLifePower #CuriousMinds #ThinkDifferently #Playhouse #Community",
-      "What if the most rebellious thing you could do right now...\n\n...is think?\n\n[TOPIC] - we are going deep on this.\n\nNot a lecture. Not a debate.\n\nA campfire. A conversation. An adventure.\n\nThat is what the Playhouse is built for.\n\n#GrowthLifePower #Playhouse #Learning #Community #CuriousMinds",
-      "They told you [TOPIC] was not for people like you.\n\nThe Playhouse disagrees.\n\nEvery week we turn ideas, history and creativity into lived experiences.\n\nBecause knowledge should not live in ivory towers.\n\nIt belongs around the campfire.\n\nCome sit with us.\n\n#GrowthLifePower #Playhouse #Community #BlackHistory #Learning"
-    ],
-    instagram: [
-      "There is a question sitting quietly underneath [TOPIC] that most people never get to ask.\n\nNot because they are not curious.\n\nBut because nobody built them a space to be curious in.\n\nThe Growth Life Power Playhouse is that space.\n\nA campfire. A game. A documentary. A workshop - all rolled into one community built for people who still believe thinking together is the most radical act of all.\n\nCome explore with us. Link in bio.\n\n#GrowthLifePower #Playhouse #Community #CuriousMinds #PersonalGrowth #Learning #BlackCommunity #Unity",
-      "The world will give you noise about [TOPIC].\n\nWe want to give you a conversation.\n\nAt the Growth Life Power Playhouse, we do not lecture. We explore.\n\nWe ask questions. We sit with the discomfort. We find the wonder.\n\nBecause the most important things in life deserve more than a scroll.\n\nThey deserve a gathering.\n\n#GrowthLifePower #Playhouse #Community #Philosophy #PersonalGrowth #Storytelling #Learning"
-    ],
-    flyer: [
-      "HEADLINE: The Revolution Will Be Curious\nSUBHEADLINE: An evening of exploration, communion and living ideas\nCALL TO ACTION: Come gather with us",
-      "HEADLINE: What If We Thought About This Together\nSUBHEADLINE: Growth Life Power Playhouse, where curious minds commune\nCALL TO ACTION: Join the conversation",
-      "HEADLINE: Knowledge Belongs Around the Campfire\nSUBHEADLINE: Live experiences for people who still believe in thinking\nCALL TO ACTION: Claim your place"
-    ]
+    color: 'var(--glp)',
+    hashtags: {
+      tiktok: '#GrowthLifePower #Playhouse #CuriousMinds #Community #Learning',
+      instagram: '#GrowthLifePower #Playhouse #Community #CuriousMinds #PersonalGrowth #Storytelling #Learning #BlackCommunity'
+    },
+    tone: 'campfire storyteller, thought-provoking, warm, community-oriented',
+    cta: ['Come explore this with us', 'Come sit with us', 'Join the conversation', 'Come gather with us']
   },
   zeenie: {
     name: 'Zeenie Summers',
-    tiktok: [
-      "I have been sitting with [TOPIC] for a while now.\n\nAnd I am not sure I have an answer yet.\n\nBut I think that is the point.\n\nSome things are not meant to be solved.\n\nThey are meant to be felt.\n\nAnd then, if you are lucky, turned into a song.",
-      "Nobody tells you that [TOPIC] will feel like this.\n\nThey give you the theory.\n\nThey do not give you the 3am version of it.\n\nThe quiet one. The one that sits with you on a Tuesday.\n\nThat is the one I write music about.",
-      "Somewhere between [TOPIC] and the song I have not finished yet,\n\nthere is a version of me I am still becoming.\n\nI think that is what all of this is.\n\nA long, winding, beautiful process of becoming.\n\nAnd I am documenting every step."
-    ],
-    instagram: [
-      "I wrote this line in my journal when I was thinking about [TOPIC]:\n\nYou cannot rush the becoming.\n\nI did not know what it meant then. I am starting to, now.\n\nSome seasons are for planting. Some are for waiting. Some are for finally understanding what you planted.\n\nI think I am in the understanding season.\n\n#ZeenieSummers #JournalEntry #TheBecoming #MusicAndLife #Storytelling #Artist #Reflection",
-      "[TOPIC] taught me something I was not expecting.\n\nThat the most human thing you can do is keep going anyway.\n\nNot because it is easy. But because the alternative, becoming smaller, quieter, less, is not really living.\n\nSo here I am. Still becoming. Still writing. Still finding the song in it.\n\n#ZeenieSummers #Artist #Becoming #MusicLife #Storytelling #LiveAuthentically"
-    ],
-    flyer: [
-      "HEADLINE: Still Becoming\nSUBHEADLINE: An intimate evening of music and presence with Zeenie Summers\nCALL TO ACTION: Come sit with me",
-      "HEADLINE: The Songs I Wrote at 3AM\nSUBHEADLINE: Live music, raw stories, real moments\nCALL TO ACTION: Be in the room",
-      "HEADLINE: A Journal Entry Live\nSUBHEADLINE: Zeenie Summers, music for the curious heart\nCALL TO ACTION: Reserve your place"
-    ]
+    color: 'var(--relove)',
+    hashtags: {
+      tiktok: '#ZeenieSummers #Artist #TheBecoming #MusicAndLife #Reflection',
+      instagram: '#ZeenieSummers #JournalEntry #TheBecoming #MusicAndLife #Storytelling #Artist #Reflection #LiveAuthentically'
+    },
+    tone: 'intimate journal entry, poetic, first person, reflective traveller',
+    cta: ['Come sit with me', 'Be in the room', 'Reserve your place', 'Listen with me']
   },
   felaa: {
     name: 'FeLAA Atelier',
-    tiktok: [
-      "This piece started as [TOPIC].\n\nHandmade. Considered. Made to last.\n\nWe do not do fast fashion.\n\nWe do slow intention.\n\nFeLAA Atelier, limited drops only.\n\nLink in bio when it is ready.",
-      "[TOPIC] - that is what this collection is made from.\n\nEvery stitch placed with intention.\n\nEvery piece one of a kind.\n\nFeLAA Atelier. Art you can wear.\n\nNext drop coming. Get on the list.",
-      "The process is the art.\n\n[TOPIC] - from raw material to finished piece.\n\nThis is what slow fashion actually looks like.\n\nFeLAA Atelier. Made with care. Worn with purpose."
-    ],
-    instagram: [
-      "[TOPIC].\n\nThat is where this piece begins.\n\nAt FeLAA Atelier, we do not design for trends. We design for the person who wants to wear something that means something.\n\nLimited. Considered. Yours.\n\nNext drop - details coming soon.\n\n#FeLAAAtelier #SlowFashion #TextileArt #HandmadeFashion #ConsciousStyle #WearableArt #LimitedDrop",
-      "Not everything made quickly is worth wearing.\n\nThis piece, rooted in [TOPIC], took time.\n\nThe stencilling. The fabric selection. The finishing.\n\nBecause that is what intentional making looks like.\n\nFeLAA Atelier. Gallery drops only.\n\n#FeLAAAtelier #TextileArt #SlowFashion #HandmadeWithLove #WearableArt #FashionArt #LimitedEdition"
-    ],
-    flyer: [
-      "HEADLINE: Worn With Intention\nSUBHEADLINE: FeLAA Atelier, limited gallery drops and handmade textiles\nCALL TO ACTION: Join the drop list",
-      "HEADLINE: Not Fast. Not Disposable.\nSUBHEADLINE: FeLAA Atelier, wearable art in limited editions\nCALL TO ACTION: View the collection",
-      "HEADLINE: The Art You Wear\nSUBHEADLINE: Handmade textile art, each piece considered and one of a kind\nCALL TO ACTION: Next drop soon"
-    ]
+    color: 'var(--felaa)',
+    hashtags: {
+      tiktok: '#FeLAAAtelier #SlowFashion #TextileArt #WearableArt #LimitedDrop',
+      instagram: '#FeLAAAtelier #SlowFashion #TextileArt #HandmadeFashion #ConsciousStyle #WearableArt #LimitedDrop #FashionArt'
+    },
+    tone: 'editorial, minimal, confident, craft-focused',
+    cta: ['Join the drop list', 'View the collection', 'Next drop soon', 'Get on the list']
   },
   afro: {
     name: 'AfroLegal',
-    tiktok: [
-      "Most people do not know this about [TOPIC].\n\nAnd that is not an accident.\n\nYour rights do not disappear because nobody told you about them.\n\nAfroLegal exists to change that.\n\nKnowledge is protection. Go to the link in bio.",
-      "When it comes to [TOPIC] - you have more rights than you think.\n\nThe system counts on you not knowing that.\n\nAfroLegal breaks it down. Clearly. In plain English.\n\nBecause legal knowledge belongs to everyone.\n\n#AfroLegal #KnowYourRights #LegalEmpowerment #BlackRights #Community",
-      "One thing about [TOPIC] that nobody explains:\n\nYou do not have to face it alone.\n\nYou do not have to guess.\n\nYou do not have to hope for the best.\n\nYou can know. AfroLegal makes sure of that.\n\n#AfroLegal #KnowYourRights #Empowerment #LegalAdvice #BlackCommunity"
-    ],
-    instagram: [
-      "Let us talk about [TOPIC].\n\nBecause too many people in our communities are navigating this without the information they are legally entitled to.\n\nAt AfroLegal, we believe legal knowledge is a form of self-protection. And self-protection is a form of self-love.\n\nYou deserve to know your rights. Clearly. Without jargon. Without judgment.\n\nThat is what we are here for.\n\n#AfroLegal #KnowYourRights #LegalEmpowerment #BlackCommunity #DiasporaPower #SelfProtection #Rights",
-      "The most powerful thing you can walk into any room knowing is [TOPIC].\n\nBecause knowledge changes the dynamic.\n\nIt changes what you accept. What you challenge. What you demand.\n\nAfroLegal exists to put that knowledge in your hands.\n\nSimply. Clearly. Powerfully.\n\n#AfroLegal #KnowYourRights #Empowerment #LegalLiteracy #BlackPower #DiasporaCommunity #Rights"
-    ],
-    flyer: [
-      "HEADLINE: Know Your Rights. Use Them.\nSUBHEADLINE: AfroLegal, legal empowerment resources for the African diaspora\nCALL TO ACTION: Get informed today",
-      "HEADLINE: The Law Belongs to You Too\nSUBHEADLINE: Clear, accessible legal knowledge for our communities\nCALL TO ACTION: Access your rights",
-      "HEADLINE: Knowledge Is Protection\nSUBHEADLINE: AfroLegal, because you deserve to know\nCALL TO ACTION: Learn more now"
-    ]
+    color: 'var(--afro)',
+    hashtags: {
+      tiktok: '#AfroLegal #KnowYourRights #LegalEmpowerment #BlackRights #DiasporaCommunity',
+      instagram: '#AfroLegal #KnowYourRights #LegalEmpowerment #BlackCommunity #DiasporaPower #SelfProtection #Rights'
+    },
+    tone: 'clear, empowering, dignified, plain English',
+    cta: ['Get informed today', 'Access your rights', 'Learn more now', 'Know your rights']
   }
 };
 
+// Dynamic content builders — use the actual raw input to shape output
+function buildTikTok(raw, brand) {
+  const meta = brandMeta[brand];
+  const words = raw.trim().split(' ');
+  const firstLine = raw.length > 80 ? raw.substring(0, 77) + '...' : raw;
+
+  // Pick hook style based on brand
+  const hooks = {
+    glp: [
+      'Here is something worth slowing down for:\n\n"' + firstLine + '"\n\nWe have been conditioned to rush past ideas like this.\n\nBut what if this is exactly where the wisdom lives?\n\nThe Playhouse exists for the curious minds who refuse to scroll past the important things.\n\nCome explore this with us.',
+      'Nobody is talking about this enough:\n\n"' + firstLine + '"\n\nAt the Playhouse, we turn ideas like this into living, breathing conversations.\n\nNot a lecture. Not a debate.\n\nA campfire. An adventure.\n\nCome sit with us.',
+      'What if the most radical thing you could do today was simply... think?\n\n"' + firstLine + '"\n\nThis is the kind of thing we explore at the Growth Life Power Playhouse.\n\nFor the curious. For the seekers. For those who know there is more.\n\nLink in bio.'
+    ],
+    zeenie: [
+      'I have been sitting with something.\n\n"' + firstLine + '"\n\nI did not expect it to land the way it did.\n\nBut some things find you at exactly the right moment.\n\nAnd then they become a song.',
+      'There is a version of this feeling I have not been able to shake:\n\n"' + firstLine + '"\n\nThe 3am version. The quiet Tuesday version.\n\nThat is the one I write music about.',
+      '"' + firstLine + '"\n\nI wrote that in my journal and could not stop thinking about it.\n\nSome things are not meant to be solved. They are meant to be felt.\n\nStill becoming. Still finding the song in it.'
+    ],
+    felaa: [
+      '"' + firstLine + '"\n\nThis is where this piece begins.\n\nHandmade. Considered. Made to last.\n\nNot fast. Not disposable.\n\nFeLAA Atelier. Limited drops only.',
+      'The process is always the art.\n\n"' + firstLine + '"\n\nEvery stitch placed with intention. Every piece one of a kind.\n\nFeLAA Atelier. Art you can wear.\n\nNext drop coming. Get on the list.',
+      '"' + firstLine + '"\n\nThat is what this collection is rooted in.\n\nWe do not do fast fashion. We do slow intention.\n\nFeLAA Atelier. Gallery drops only.'
+    ],
+    afro: [
+      'Most people do not know this:\n\n"' + firstLine + '"\n\nAnd that is not an accident.\n\nYour rights do not disappear because nobody told you about them.\n\nAfroLegal exists to change that. Knowledge is protection.',
+      '"' + firstLine + '"\n\nWhen it comes to this - you have more rights than you think.\n\nThe system counts on you not knowing that.\n\nAfroLegal breaks it down. Clearly. In plain English.',
+      'One thing nobody explains about this:\n\n"' + firstLine + '"\n\nYou do not have to face it alone. You do not have to guess.\n\nYou can know. AfroLegal makes sure of that.\n\nLink in bio.'
+    ]
+  };
+
+  const pool = hooks[brand];
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  return pick + '\n\n' + meta.hashtags.tiktok;
+}
+
+function buildInstagram(raw, brand) {
+  const meta = brandMeta[brand];
+  const firstLine = raw.length > 100 ? raw.substring(0, 97) + '...' : raw;
+
+  const posts = {
+    glp: [
+      '"' + firstLine + '"\n\nThere is a question sitting quietly underneath this that most people never get to ask.\n\nNot because they are not curious. But because nobody built them a space to be curious in.\n\nThe Growth Life Power Playhouse is that space.\n\nA campfire. A game. A documentary. A workshop, all rolled into one community built for people who still believe thinking together is the most radical act of all.\n\nCome explore with us. Link in bio.\n\n' + meta.hashtags.instagram,
+      'The world will give you noise.\n\nWe want to give you a conversation about this:\n\n"' + firstLine + '"\n\nAt the Growth Life Power Playhouse, we do not lecture. We explore together.\n\nWe ask questions. We sit with the discomfort. We find the wonder.\n\nBecause the most important things in life deserve more than a scroll. They deserve a gathering.\n\n' + meta.hashtags.instagram
+    ],
+    zeenie: [
+      'I wrote this in my journal and could not stop thinking about it:\n\n"' + firstLine + '"\n\nSome things find you at exactly the right moment.\n\nSome seasons are for planting. Some are for waiting. Some are for finally understanding what you planted.\n\nI think I am in the understanding season.\n\n' + meta.hashtags.instagram,
+      '"' + firstLine + '"\n\nThis taught me something I was not expecting.\n\nThat the most human thing you can do is keep going anyway. Not because it is easy. But because becoming smaller, quieter, less, is not really living.\n\nSo here I am. Still becoming. Still writing. Still finding the song in it.\n\n' + meta.hashtags.instagram
+    ],
+    felaa: [
+      '"' + firstLine + '"\n\nThat is where this piece begins.\n\nAt FeLAA Atelier, we do not design for trends. We design for the person who wants to wear something that means something.\n\nLimited. Considered. Yours.\n\nNext drop, details coming soon.\n\n' + meta.hashtags.instagram,
+      'Not everything made quickly is worth wearing.\n\nThis piece is rooted in:\n\n"' + firstLine + '"\n\nThe stencilling. The fabric selection. The finishing. Because that is what intentional making looks like.\n\nFeLAA Atelier. Gallery drops only.\n\n' + meta.hashtags.instagram
+    ],
+    afro: [
+      'Let us talk about this:\n\n"' + firstLine + '"\n\nToo many people in our communities are navigating situations like this without the information they are legally entitled to.\n\nAt AfroLegal, we believe legal knowledge is a form of self-protection. And self-protection is a form of self-love.\n\nYou deserve to know your rights. Clearly. Without jargon.\n\n' + meta.hashtags.instagram,
+      '"' + firstLine + '"\n\nKnowing this changes everything.\n\nIt changes what you accept. What you challenge. What you demand.\n\nAfroLegal exists to put that knowledge in your hands. Simply. Clearly. Powerfully.\n\n' + meta.hashtags.instagram
+    ]
+  };
+
+  const pool = posts[brand];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function buildFlyer(raw, brand) {
+  const meta = brandMeta[brand];
+  const short = raw.length > 50 ? raw.substring(0, 47) + '...' : raw;
+  const cta = meta.cta[Math.floor(Math.random() * meta.cta.length)];
+
+  const headlines = {
+    glp: [
+      'HEADLINE: ' + (raw.length > 40 ? raw.substring(0,40).trim() : raw) + '\nSUBHEADLINE: Growth Life Power Playhouse, where curious minds commune\nCALL TO ACTION: ' + cta,
+      'HEADLINE: Come Explore This Together\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta,
+      'HEADLINE: The Campfire Is Lit\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta
+    ],
+    zeenie: [
+      'HEADLINE: ' + (raw.length > 35 ? raw.substring(0,35).trim() : raw) + '\nSUBHEADLINE: An intimate evening of music and presence with Zeenie Summers\nCALL TO ACTION: ' + cta,
+      'HEADLINE: Still Becoming\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta,
+      'HEADLINE: A Journal Entry, Live\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta
+    ],
+    felaa: [
+      'HEADLINE: Worn With Intention\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta,
+      'HEADLINE: ' + (raw.length > 30 ? raw.substring(0,30).trim() : raw) + '\nSUBHEADLINE: FeLAA Atelier, limited gallery drops\nCALL TO ACTION: ' + cta,
+      'HEADLINE: The Art You Wear\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta
+    ],
+    afro: [
+      'HEADLINE: Know Your Rights. Use Them.\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta,
+      'HEADLINE: The Law Belongs to You Too\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta,
+      'HEADLINE: Knowledge Is Protection\nSUBHEADLINE: ' + short + '\nCALL TO ACTION: ' + cta
+    ]
+  };
+
+  const pool = headlines[brand];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
 let selectedBrand = 'glp';
 let selectedType  = 'tiktok';
-let lastUsed = { tiktok: -1, instagram: -1, flyer: -1 };
 
 function selectBrand(btn) {
   document.querySelectorAll('#brandVoiceButtons .voice-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -1328,18 +1394,6 @@ function copyOut(id) {
   });
 }
 
-function pickRandom(arr, lastIdx) {
-  var idx;
-  do { idx = Math.floor(Math.random() * arr.length); }
-  while (arr.length > 1 && idx === lastIdx);
-  return { text: arr[idx], idx: idx };
-}
-
-function injectTopic(template, raw) {
-  var topic = raw.length > 60 ? raw.substring(0, 57) + '...' : raw;
-  return template.replace(/\[TOPIC\]/g, topic);
-}
-
 function generateAIContent() {
   var raw = document.getElementById('rawInput').value.trim();
   if (!raw) {
@@ -1348,7 +1402,6 @@ function generateAIContent() {
     return;
   }
 
-  var voice = brandVoices[selectedBrand];
   var types = selectedType === 'all' ? ['tiktok', 'instagram', 'flyer'] : [selectedType];
 
   document.getElementById('ceOutput').style.display  = 'none';
@@ -1366,24 +1419,18 @@ function generateAIContent() {
     });
 
     if (types.indexOf('tiktok') > -1) {
-      var r1 = pickRandom(voice.tiktok, lastUsed.tiktok);
-      lastUsed.tiktok = r1.idx;
       document.getElementById('out-tiktok').style.display = 'block';
-      document.getElementById('tiktok-text').textContent  = injectTopic(r1.text, raw);
+      document.getElementById('tiktok-text').textContent  = buildTikTok(raw, selectedBrand);
     }
     if (types.indexOf('instagram') > -1) {
-      var r2 = pickRandom(voice.instagram, lastUsed.instagram);
-      lastUsed.instagram = r2.idx;
       document.getElementById('out-instagram').style.display = 'block';
-      document.getElementById('instagram-text').textContent  = injectTopic(r2.text, raw);
+      document.getElementById('instagram-text').textContent  = buildInstagram(raw, selectedBrand);
     }
     if (types.indexOf('flyer') > -1) {
-      var r3 = pickRandom(voice.flyer, lastUsed.flyer);
-      lastUsed.flyer = r3.idx;
       document.getElementById('out-flyer').style.display = 'block';
-      document.getElementById('flyer-text').textContent  = injectTopic(r3.text, raw);
+      document.getElementById('flyer-text').textContent  = buildFlyer(raw, selectedBrand);
     }
-  }, 1000);
+  }, 800);
 }
 
 // ── Promote countdown ─────────────────────────────────────────
