@@ -374,6 +374,88 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
 .ch-name { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .ch-desc { font-size: 11px; color: var(--text3); line-height: 1.6; }
 
+
+/* ── Accounts tab ────────────────────────────────────────────────── */
+.acc-controls {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-bottom: 20px; align-items: center;
+}
+.acc-select {
+  padding: 7px 12px; border-radius: var(--radius-sm);
+  font-size: 12px; border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--text);
+  font-family: inherit; cursor: pointer;
+}
+.acc-select:focus { outline: none; border-color: var(--text3); }
+.acc-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 8px; }
+.acc-table thead tr { border-bottom: 1px solid var(--border2); }
+.acc-table thead th {
+  text-align: left; padding: 7px 10px;
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--text3);
+}
+.acc-table tbody tr { border-bottom: 1px solid var(--border); }
+.acc-table tbody tr:hover { background: var(--bg3); }
+.acc-table td { padding: 6px 10px; }
+.acc-input {
+  background: transparent; border: none; color: var(--text);
+  font-family: inherit; font-size: 12px; width: 100%;
+  padding: 2px 0;
+}
+.acc-input:focus { outline: none; border-bottom: 1px solid var(--text3); }
+.acc-input.amount { text-align: right; font-family: "JetBrains Mono", monospace; }
+.acc-del {
+  background: none; border: none; color: var(--text3);
+  cursor: pointer; font-size: 13px; padding: 2px 6px;
+  transition: color .15s;
+}
+.acc-del:hover { color: var(--danger); }
+.acc-add-btn {
+  font-size: 11px; color: var(--text3); background: transparent;
+  border: 1px dashed var(--border2); border-radius: var(--radius-sm);
+  padding: 6px 14px; cursor: pointer; font-family: inherit;
+  transition: all .15s; width: 100%; margin-top: 4px;
+}
+.acc-add-btn:hover { border-color: var(--text3); color: var(--text); }
+.acc-summary {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin: 20px 0;
+}
+.acc-summary-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px;
+}
+.acc-summary-card .label { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+.acc-summary-card .value {
+  font-size: 22px; font-weight: 300;
+  font-family: "JetBrains Mono", monospace;
+}
+.acc-summary-card .value.income { color: var(--ok); }
+.acc-summary-card .value.expense { color: var(--danger); }
+.acc-summary-card .value.net-pos { color: var(--ok); }
+.acc-summary-card .value.net-neg { color: var(--danger); }
+.acc-section-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text3);
+  margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.acc-section-label .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.dot-income { background: var(--ok); }
+.dot-expense { background: var(--danger); }
+.pdf-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg3); color: var(--text2);
+  border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 9px 18px; font-family: inherit; font-size: 12px;
+  cursor: pointer; transition: all .15s;
+}
+.pdf-btn:hover { border-color: var(--felaa); color: var(--felaa); }
+@media (max-width: 768px) {
+  .acc-summary { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 768px) {
   .hamburger { display: block; }
   .sidebar {
@@ -432,6 +514,9 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
     </div>
     <div class="nav-item" onclick="showSection('promote',this)">
       <i class="fa-solid fa-bullhorn"></i> Promote
+    </div>
+    <div class="nav-item" onclick="showSection('accounts',this)">
+      <i class="fa-solid fa-book"></i> Accounts
     </div>
 
     <div class="sidebar-footer">
@@ -987,6 +1072,113 @@ select.filter-select:focus { outline: none; border-color: var(--text3); }
 
       </section>
 
+      <!-- ════════════════ ACCOUNTS ════════════════ -->
+      <section class="section" id="s-accounts">
+        <div class="section-heading">Accounts &amp; Bookkeeping</div>
+
+        <!-- Controls -->
+        <div class="acc-controls">
+          <select class="acc-select" id="acc-brand" onchange="loadAccounts()">
+            <option value="all">All Brands</option>
+            <option value="glp">Growth Life Power</option>
+            <option value="zeenie">Zeenie Summers</option>
+            <option value="felaa">FeLAA Atelier</option>
+            <option value="relove">Relove Soul Finds</option>
+            <option value="afro">AfroLegal</option>
+            <option value="cheri">Chéribeau</option>
+            <option value="afromunch">Afromunch</option>
+          </select>
+          <select class="acc-select" id="acc-month" onchange="loadAccounts()">
+            <option value="2026-01">January 2026</option>
+            <option value="2026-02">February 2026</option>
+            <option value="2026-03">March 2026</option>
+            <option value="2026-04">April 2026</option>
+            <option value="2026-05">May 2026</option>
+            <option value="2026-06" selected>June 2026</option>
+            <option value="2026-07">July 2026</option>
+            <option value="2026-08">August 2026</option>
+            <option value="2026-09">September 2026</option>
+            <option value="2026-10">October 2026</option>
+            <option value="2026-11">November 2026</option>
+            <option value="2026-12">December 2026</option>
+          </select>
+          <button class="pdf-btn" onclick="downloadPDF()">
+            <i class="fa-solid fa-file-arrow-down"></i> Download PDF Statement
+          </button>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="acc-summary">
+          <div class="acc-summary-card">
+            <div class="label">Total Income</div>
+            <div class="value income" id="total-income">£0.00</div>
+          </div>
+          <div class="acc-summary-card">
+            <div class="label">Total Expenses</div>
+            <div class="value expense" id="total-expenses">£0.00</div>
+          </div>
+          <div class="acc-summary-card">
+            <div class="label">Net Profit / Loss</div>
+            <div class="value" id="net-total">£0.00</div>
+          </div>
+        </div>
+
+        <!-- Income -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="acc-section-label">
+            <span class="dot dot-income"></span> Income
+          </div>
+          <table class="acc-table" id="income-table">
+            <thead>
+              <tr>
+                <th style="width:30%">Description</th>
+                <th style="width:25%">Category</th>
+                <th style="width:15%">Brand</th>
+                <th style="width:20%;text-align:right">Amount (£)</th>
+                <th style="width:10%"></th>
+              </tr>
+            </thead>
+            <tbody id="income-body"></tbody>
+          </table>
+          <button class="acc-add-btn" onclick="addRow('income')">
+            <i class="fa-solid fa-plus"></i> Add income row
+          </button>
+        </div>
+
+        <!-- Expenses -->
+        <div class="card">
+          <div class="acc-section-label">
+            <span class="dot dot-expense"></span> Expenses
+          </div>
+          <table class="acc-table" id="expense-table">
+            <thead>
+              <tr>
+                <th style="width:30%">Description</th>
+                <th style="width:25%">Category</th>
+                <th style="width:15%">Brand</th>
+                <th style="width:20%;text-align:right">Amount (£)</th>
+                <th style="width:10%"></th>
+              </tr>
+            </thead>
+            <tbody id="expense-body"></tbody>
+          </table>
+          <button class="acc-add-btn" onclick="addRow('expense')">
+            <i class="fa-solid fa-plus"></i> Add expense row
+          </button>
+        </div>
+
+        <!-- Notes -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title"><i class="fa-solid fa-note-sticky" style="color:var(--warn)"></i> Monthly notes</div>
+          <textarea id="acc-notes"
+            placeholder="Add any notes for this month — invoices outstanding, upcoming costs, observations..."
+            style="width:100%;min-height:80px;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:inherit;font-size:12px;padding:10px;resize:vertical;line-height:1.6;"
+            oninput="saveAccounts()"></textarea>
+        </div>
+
+      </section>
+
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /shell -->
@@ -1049,7 +1241,7 @@ document.getElementById('topbar-date').textContent =
 // ── Navigation ────────────────────────────────────────────────
 const sectionTitles = {
   overview:'Overview', products:'Product Registry', faire:'Faire 60-Day',
-  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow', content:'Content Engine', promote:'Event Promotion'
+  arbitrage:'Arbitrage Hub', brands:'Brand Pages', jit:'JIT Flow', content:'Content Engine', promote:'Event Promotion', accounts:'Accounts & Bookkeeping'
 };
 function showSection(id, el) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1459,12 +1651,217 @@ document.addEventListener('click', function(e) {
   }
 });
 
+
+// ── Accounts & Bookkeeping ────────────────────────────────────────────
+
+const INCOME_CATS  = ['Live Performance','Workshop','Digital Product','Tip Jar','Wholesale','Retail','Licensing','Other'];
+const EXPENSE_CATS = ['Equipment','Marketing','Travel','Admin','Platform Fees','Stripe Fees','Printing','Materials','Subscriptions','Other'];
+const BRANDS = ['All Brands','Growth Life Power','Zeenie Summers','FeLAA Atelier','Relove Soul Finds','AfroLegal','Cheribeau','Afromunch'];
+
+function accKey() {
+  var brand = document.getElementById('acc-brand').value;
+  var month = document.getElementById('acc-month').value;
+  return 'acc_' + brand + '_' + month;
+}
+
+function getAccData() {
+  try {
+    var raw = localStorage.getItem(accKey());
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { income: [], expenses: [], notes: '' };
+}
+
+function saveAccounts() {
+  var data = { income: [], expenses: [], notes: '' };
+  // Collect income rows
+  var iRows = document.querySelectorAll('#income-body tr');
+  iRows.forEach(function(row) {
+    var inputs = row.querySelectorAll('.acc-input');
+    if (inputs.length >= 3) {
+      data.income.push({
+        desc: inputs[0].value,
+        cat:  inputs[1].value,
+        brand: inputs[2].value,
+        amt:  inputs[3] ? inputs[3].value : '0'
+      });
+    }
+  });
+  // Collect expense rows
+  var eRows = document.querySelectorAll('#expense-body tr');
+  eRows.forEach(function(row) {
+    var inputs = row.querySelectorAll('.acc-input');
+    if (inputs.length >= 3) {
+      data.expenses.push({
+        desc: inputs[0].value,
+        cat:  inputs[1].value,
+        brand: inputs[2].value,
+        amt:  inputs[3] ? inputs[3].value : '0'
+      });
+    }
+  });
+  data.notes = document.getElementById('acc-notes').value;
+  try { localStorage.setItem(accKey(), JSON.stringify(data)); } catch(e) {}
+  updateTotals();
+}
+
+function updateTotals() {
+  var income = 0, expenses = 0;
+  document.querySelectorAll('#income-body .acc-input.amount').forEach(function(i) {
+    income += parseFloat(i.value.replace(/[^0-9.]/g,'')) || 0;
+  });
+  document.querySelectorAll('#expense-body .acc-input.amount').forEach(function(i) {
+    expenses += parseFloat(i.value.replace(/[^0-9.]/g,'')) || 0;
+  });
+  var net = income - expenses;
+  document.getElementById('total-income').textContent   = '\u00a3' + income.toFixed(2);
+  document.getElementById('total-expenses').textContent = '\u00a3' + expenses.toFixed(2);
+  var netEl = document.getElementById('net-total');
+  netEl.textContent = (net >= 0 ? '\u00a3' : '-\u00a3') + Math.abs(net).toFixed(2);
+  netEl.className = 'value ' + (net >= 0 ? 'net-pos' : 'net-neg');
+}
+
+function makeCatOptions(cats, selected) {
+  return cats.map(function(c) {
+    return '<option value="' + c + '"' + (c === selected ? ' selected' : '') + '>' + c + '</option>';
+  }).join('');
+}
+
+function makeBrandOptions(selected) {
+  return BRANDS.map(function(b) {
+    return '<option value="' + b + '"' + (b === selected ? ' selected' : '') + '>' + b + '</option>';
+  }).join('');
+}
+
+function buildRow(type, item) {
+  var cats = type === 'income' ? INCOME_CATS : EXPENSE_CATS;
+  var desc  = item ? item.desc  : '';
+  var cat   = item ? item.cat   : cats[0];
+  var brand = item ? item.brand : 'All Brands';
+  var amt   = item ? item.amt   : '';
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input class="acc-input" placeholder="e.g. Ripples tip jar" value="' + desc.replace(/"/g,'&quot;') + '" oninput="saveAccounts()"></td>' +
+    '<td><select class="acc-input" onchange="saveAccounts()">' + makeCatOptions(cats, cat) + '</select></td>' +
+    '<td><select class="acc-input" onchange="saveAccounts()">' + makeBrandOptions(brand) + '</select></td>' +
+    '<td><input class="acc-input amount" type="number" min="0" step="0.01" placeholder="0.00" value="' + amt + '" oninput="saveAccounts()"></td>' +
+    '<td><button class="acc-del" onclick="this.closest(\'tr\').remove();saveAccounts();" title="Remove">\u00d7</button></td>';
+  return tr;
+}
+
+function addRow(type) {
+  var tbody = document.getElementById(type === 'income' ? 'income-body' : 'expense-body');
+  tbody.appendChild(buildRow(type, null));
+  saveAccounts();
+}
+
+function loadAccounts() {
+  var data = getAccData();
+  var ib = document.getElementById('income-body');
+  var eb = document.getElementById('expense-body');
+  ib.innerHTML = '';
+  eb.innerHTML = '';
+  if (data.income.length === 0) {
+    ib.appendChild(buildRow('income', null));
+  } else {
+    data.income.forEach(function(item) { ib.appendChild(buildRow('income', item)); });
+  }
+  if (data.expenses.length === 0) {
+    eb.appendChild(buildRow('expense', null));
+  } else {
+    data.expenses.forEach(function(item) { eb.appendChild(buildRow('expense', item)); });
+  }
+  document.getElementById('acc-notes').value = data.notes || '';
+  updateTotals();
+}
+
+function downloadPDF() {
+  var brand    = document.getElementById('acc-brand').options[document.getElementById('acc-brand').selectedIndex].text;
+  var monthOpt = document.getElementById('acc-month');
+  var month    = monthOpt.options[monthOpt.selectedIndex].text;
+
+  // Collect data
+  var incomeRows = [], expenseRows = [], totalIncome = 0, totalExpense = 0;
+  document.querySelectorAll('#income-body tr').forEach(function(row) {
+    var inputs = row.querySelectorAll('.acc-input');
+    if (!inputs.length) return;
+    var desc  = inputs[0].value || '';
+    var cat   = inputs[1] ? inputs[1].value : '';
+    var brd   = inputs[2] ? inputs[2].value : '';
+    var amt   = parseFloat((inputs[3] ? inputs[3].value : '0').replace(/[^0-9.]/g,'')) || 0;
+    totalIncome += amt;
+    incomeRows.push({ desc: desc, cat: cat, brand: brd, amt: amt });
+  });
+  document.querySelectorAll('#expense-body tr').forEach(function(row) {
+    var inputs = row.querySelectorAll('.acc-input');
+    if (!inputs.length) return;
+    var desc  = inputs[0].value || '';
+    var cat   = inputs[1] ? inputs[1].value : '';
+    var brd   = inputs[2] ? inputs[2].value : '';
+    var amt   = parseFloat((inputs[3] ? inputs[3].value : '0').replace(/[^0-9.]/g,'')) || 0;
+    totalExpense += amt;
+    expenseRows.push({ desc: desc, cat: cat, brand: brd, amt: amt });
+  });
+  var net   = totalIncome - totalExpense;
+  var notes = document.getElementById('acc-notes').value;
+
+  function fmt(n) { return (n < 0 ? '-\u00a3' : '\u00a3') + Math.abs(n).toFixed(2); }
+  function rows(arr) {
+    if (!arr.length) return '<tr><td colspan="4" style="color:#999;font-style:italic;padding:8px 0;">No entries</td></tr>';
+    return arr.map(function(r) {
+      return '<tr style="border-bottom:1px solid #eee;">' +
+        '<td style="padding:7px 8px">' + (r.desc || '-') + '</td>' +
+        '<td style="padding:7px 8px;color:#666">' + (r.cat || '-') + '</td>' +
+        '<td style="padding:7px 8px;color:#666">' + (r.brand || '-') + '</td>' +
+        '<td style="padding:7px 8px;text-align:right;font-family:monospace">' + fmt(r.amt) + '</td></tr>';
+    }).join('');
+  }
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Statement ' + month + '</title>' +
+    '<style>body{font-family:Georgia,serif;margin:0;padding:40px;color:#1a1a1a;font-size:13px}' +
+    'h1{font-size:22px;font-weight:700;margin:0 0 4px}' +
+    '.meta{color:#666;font-size:12px;margin-bottom:32px}' +
+    'table{width:100%;border-collapse:collapse;margin-bottom:24px}' +
+    'thead tr{border-bottom:2px solid #1a1a1a}' +
+    'thead th{text-align:left;padding:6px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.06em}' +
+    '.section-head{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin:24px 0 8px;padding-bottom:4px}' +
+    '.income-head{color:#2a7a3a;border-bottom:2px solid #2a7a3a}' +
+    '.expense-head{color:#c0392b;border-bottom:2px solid #c0392b}' +
+    '.summary{background:#f8f8f8;border:1px solid #e0e0e0;padding:16px 20px;margin-top:24px;display:flex;gap:40px}' +
+    '.sum-item .label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#666;margin-bottom:4px}' +
+    '.sum-item .val{font-size:20px;font-family:monospace;font-weight:700}' +
+    '.net-pos{color:#2a7a3a}.net-neg{color:#c0392b}' +
+    '.notes{margin-top:24px;padding:14px;background:#fffdf0;border-left:3px solid #c4a35a;font-size:12px;line-height:1.7;color:#555}' +
+    '.footer{margin-top:40px;padding-top:12px;border-top:1px solid #ddd;font-size:11px;color:#999;display:flex;justify-content:space-between}' +
+    '</style></head><body>' +
+    '<h1>Financial Statement</h1>' +
+    '<div class="meta">' + brand + ' &nbsp;|&nbsp; ' + month + ' &nbsp;|&nbsp; Generated ' + new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'}) + '</div>' +
+    '<div class="section-head income-head">Income</div>' +
+    '<table><thead><tr><th>Description</th><th>Category</th><th>Brand</th><th style="text-align:right">Amount</th></tr></thead><tbody>' + rows(incomeRows) + '</tbody></table>' +
+    '<div class="section-head expense-head">Expenses</div>' +
+    '<table><thead><tr><th>Description</th><th>Category</th><th>Brand</th><th style="text-align:right">Amount</th></tr></thead><tbody>' + rows(expenseRows) + '</tbody></table>' +
+    '<div class="summary">' +
+    '<div class="sum-item"><div class="label">Total Income</div><div class="val" style="color:#2a7a3a">' + fmt(totalIncome) + '</div></div>' +
+    '<div class="sum-item"><div class="label">Total Expenses</div><div class="val" style="color:#c0392b">' + fmt(totalExpense) + '</div></div>' +
+    '<div class="sum-item"><div class="label">Net Profit / Loss</div><div class="val ' + (net >= 0 ? 'net-pos' : 'net-neg') + '">' + fmt(net) + '</div></div>' +
+    '</div>' +
+    (notes ? '<div class="notes"><strong>Notes:</strong><br>' + notes.replace(/\n/g,'<br>') + '</div>' : '') +
+    '<div class="footer"><span>Growth Life Power Ecosystem &mdash; Internal Record</span><span>' + brand + ' &mdash; ' + month + '</span></div>' +
+    '</body></html>';
+
+  var win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(function() { win.print(); }, 400);
+}
+
 // ── Init ──────────────────────────────────────────────────────
 initOverview();
 initCharts();
 renderProducts();
 renderFaire();
 renderArb();
+loadAccounts();
 </script>
 </body>
 </html>
